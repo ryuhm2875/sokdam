@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>류봉두의 국어수업 — 속담 퀴즈</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F4F6;--surface:#FFF;--surface2:#F8F9FA;--primary:#3182F6;--primary-light:#EBF3FE;--primary-dark:#1A6EED;--success:#00C471;--success-light:#E5FAF1;--danger:#F03E3E;--danger-light:#FFF0F0;--warn:#F59F00;--warn-light:#FFF3CD;--text1:#191F28;--text2:#4E5968;--text3:#8B95A1;--border:#E5E8EB;--radius:16px;--radius-sm:10px;--shadow:0 2px 12px rgba(0,0,0,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);color:var(--text1);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 60px}
+.topbar{width:100%;max-width:520px;display:flex;align-items:center;justify-content:space-between;padding:20px 0 12px}
+.topbar-brand{font-size:14px;font-weight:800;color:var(--primary)}
+.topbar-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.topbar-user{font-size:13px;color:var(--text2);font-weight:600;display:none}
+.card{width:100%;max-width:520px;background:var(--surface);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow);margin-top:12px}
+.hero-emoji{font-size:36px;margin-bottom:14px;display:block}
+.hero-title{font-size:26px;font-weight:800;letter-spacing:-.8px;line-height:1.25;margin-bottom:8px}
+.hero-desc{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:24px}
+.input-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px}
+.input-field{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;font-size:16px;font-family:inherit;color:var(--text1);background:var(--surface);outline:none;transition:border-color .2s;margin-bottom:16px}
+.input-field:focus{border-color:var(--primary)}
+.input-field::placeholder{color:var(--text3)}
+.login-err{font-size:13px;color:var(--danger);margin-top:-10px;margin-bottom:14px;display:none}
+.prev-record{background:var(--primary-light);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:20px;display:none}
+.prev-record-title{font-size:12px;font-weight:700;color:var(--primary);margin-bottom:6px}
+.prev-record-body{font-size:14px;font-weight:600;color:var(--text1)}
+.prev-record-sub{font-size:12px;color:var(--text3);margin-top:3px}
+/* 모드 선택 탭 */
+.mode-tabs{display:flex;gap:8px;margin-bottom:20px}
+.mode-tab{flex:1;border:2px solid var(--border);border-radius:var(--radius-sm);padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surface)}
+.mode-tab:hover{border-color:var(--primary);background:var(--primary-light)}
+.mode-tab.active{border-color:var(--primary);background:var(--primary-light)}
+.mode-tab .mt-icon{font-size:24px;margin-bottom:6px}
+.mode-tab .mt-title{font-size:13px;font-weight:800;color:var(--text1)}
+.mode-tab .mt-desc{font-size:11px;color:var(--text3);margin-top:3px;line-height:1.4}
+.mode-tab.active .mt-title,.mode-tab.active .mt-desc{color:var(--primary)}
+.sel-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:10px}
+.sel-grid{display:grid;gap:8px;margin-bottom:20px}
+.sel-grid.col3{grid-template-columns:1fr 1fr 1fr}
+.sel-grid.col2{grid-template-columns:1fr 1fr}
+.sel-btn{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 6px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surface)}
+.sel-btn:hover{border-color:var(--primary);background:var(--primary-light)}
+.sel-btn.active{border-color:var(--primary);background:var(--primary-light)}
+.sel-btn .s-main{font-size:13px;font-weight:800;color:var(--text1)}
+.sel-btn .s-sub{font-size:10px;color:var(--text3);margin-top:3px}
+.sel-btn.active .s-main,.sel-btn.active .s-sub{color:var(--primary)}
+.btn-primary{width:100%;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);padding:16px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .15s,transform .1s;letter-spacing:-.3px}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{background:var(--border);color:var(--text3);cursor:not-allowed}
+.btn-secondary{width:100%;background:var(--surface2);color:var(--text1);border:none;border-radius:var(--radius-sm);padding:14px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;margin-top:10px}
+.btn-secondary:hover{background:var(--border)}
+/* 퀴즈 헤더 */
+.quiz-header{width:100%;max-width:520px;margin-top:8px}
+.progress-bar-wrap{width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:10px}
+.progress-bar-fill{height:100%;background:var(--primary);border-radius:3px;transition:width .4s ease}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:var(--text3);font-weight:500}
+.quiz-score-badge{background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.live-level-wrap{margin-top:10px;background:var(--surface2);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.live-emoji{font-size:22px;flex-shrink:0}
+.live-info{flex:1;min-width:0}
+.live-title{font-size:12px;font-weight:800;color:var(--text1)}
+.live-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.live-right{flex-shrink:0;text-align:right}
+.live-pct-num{font-size:14px;font-weight:800;color:var(--primary);margin-bottom:4px}
+.live-bar-bg{width:64px;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.live-bar-fill{height:100%;border-radius:3px;transition:width .4s ease,background-color .4s ease}
+/* 기본 모드 문제 */
+.q-type-tag{display:inline-block;background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;margin-bottom:12px}
+.q-text{font-size:17px;font-weight:700;line-height:1.55;letter-spacing:-.5px;color:var(--text1);margin-bottom:6px}
+.q-hint{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7;background:var(--surface2);border-radius:8px;padding:10px 12px}
+.q-hint.no-hint{background:transparent;padding:0}
+.options-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.option-btn{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;font-size:13px;font-weight:500;font-family:inherit;color:var(--text1);cursor:pointer;text-align:left;transition:all .15s;line-height:1.6;display:flex;align-items:flex-start;gap:12px}
+.option-btn:hover:not(:disabled){border-color:var(--primary);background:var(--primary-light)}
+.option-btn.correct{border-color:var(--success);background:var(--success-light);color:#00864E}
+.option-btn.wrong{border-color:var(--danger);background:var(--danger-light);color:var(--danger)}
+.option-btn.reveal{border-color:var(--success);background:var(--success-light);color:#00864E}
+.option-btn:disabled{cursor:not-allowed}
+.opt-label{display:flex;align-items:center;justify-content:center;min-width:26px;height:26px;border-radius:6px;background:var(--surface2);font-size:12px;font-weight:700;color:var(--text3);flex-shrink:0;margin-top:1px}
+.option-btn.correct .opt-label{background:var(--success);color:#fff}
+.option-btn.wrong   .opt-label{background:var(--danger);color:#fff}
+.option-btn.reveal  .opt-label{background:var(--success);color:#fff}
+.feedback-box{border-radius:var(--radius-sm);padding:14px 16px;font-size:13px;line-height:1.65;margin-bottom:14px;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--success-light);color:#00864E;border-left:4px solid var(--success)}
+.feedback-box.ng{background:var(--danger-light);color:#C92A2A;border-left:4px solid var(--danger)}
+.fb-title{font-weight:800;margin-bottom:5px;font-size:14px}
+.fb-meaning{font-size:13px;margin-top:2px}
+.fb-example{font-size:12px;color:var(--text3);margin-top:6px;font-style:italic}
+/* 도전 모드 지문 */
+.genre-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;margin-bottom:10px;color:#fff}
+.genre-칼럼{background:#8e44ad}
+.genre-신문기사{background:#2471a3}
+.genre-이야기{background:#b9770e}
+.genre-학생생활{background:#1e8449}
+.passage-box{background:var(--surface2);border-left:3px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:14px;line-height:1.9;color:var(--text2);max-height:320px;overflow-y:auto;text-align:justify}
+.passage-box p{margin-bottom:10px}
+.passage-box p:last-child{margin-bottom:0}
+.ans-input-wrap{margin-bottom:14px}
+.ans-input{width:100%;border:2px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;font-size:16px;font-family:inherit;color:var(--text1);background:var(--surface);outline:none;transition:border-color .2s;letter-spacing:.3px}
+.ans-input:focus{border-color:var(--primary)}
+.ans-input.correct-input{border-color:var(--success);background:var(--success-light)}
+.ans-input.wrong-input{border-color:var(--danger);background:var(--danger-light)}
+.ans-input::placeholder{color:var(--text3)}
+.submit-btn{width:100%;background:var(--warn);color:#fff;border:none;border-radius:var(--radius-sm);padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .15s;margin-bottom:14px}
+.submit-btn:hover{background:#e08e00}
+.submit-btn:disabled{background:var(--border);color:var(--text3);cursor:not-allowed}
+/* 결과 */
+.title-banner{border-radius:var(--radius);padding:22px 20px;text-align:center;margin-bottom:20px;background:linear-gradient(135deg,#1A6EED,#3182F6)}
+.title-banner.gold{background:linear-gradient(135deg,#B8860B,#F5A623)}
+.title-banner.silver{background:linear-gradient(135deg,#5A7A8A,#8EAABB)}
+.title-banner.bronze{background:linear-gradient(135deg,#7B5A3A,#C08553)}
+.title-banner.green{background:linear-gradient(135deg,#2E7D32,#43A047)}
+.title-banner.sprout{background:linear-gradient(135deg,#558B2F,#7CB342)}
+.title-banner.red{background:linear-gradient(135deg,#C62828,#E53935)}
+.banner-emoji{font-size:40px;display:block;margin-bottom:8px}
+.banner-title{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:4px}
+.banner-sub{font-size:13px;color:rgba(255,255,255,.85);line-height:1.6;white-space:pre-line}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px}
+.rstat{background:var(--surface2);border-radius:var(--radius-sm);padding:14px 10px;text-align:center}
+.rstat-num{font-size:22px;font-weight:800;letter-spacing:-1px}
+.rstat-label{font-size:11px;color:var(--text3);margin-top:3px}
+.rstat.c .rstat-num{color:var(--success)}
+.rstat.w .rstat-num{color:var(--danger)}
+.rstat.s .rstat-num{color:var(--primary)}
+.send-status{text-align:center;font-size:13px;font-weight:600;padding:12px;border-radius:var(--radius-sm);margin-top:10px;display:none}
+.send-status.sending{background:var(--primary-light);color:var(--primary);display:block}
+.send-status.sent{background:var(--success-light);color:#00864E;display:block}
+.send-status.failed{background:var(--danger-light);color:var(--danger);display:block}
+.section-title{font-size:13px;font-weight:700;color:var(--text2);margin:20px 0 10px;display:flex;align-items:center;gap:6px}
+.wrong-list{display:flex;flex-direction:column;gap:8px}
+.wrong-item{background:var(--danger-light);border-radius:var(--radius-sm);padding:12px 14px;border-left:3px solid var(--danger)}
+.wrong-word{font-size:15px;font-weight:700;color:var(--danger);margin-bottom:3px}
+.wrong-meaning{font-size:13px;color:var(--text2);line-height:1.5}
+.wrong-answer{font-size:12px;color:var(--text3);margin-top:4px}
+.score-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto}
+.score-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius-sm)}
+.score-rank{font-size:13px;font-weight:800;color:var(--text3);width:22px;text-align:center}
+.score-rank.r1{color:#F5A623}.score-rank.r2{color:#9B9B9B}.score-rank.r3{color:#C08553}
+.score-name{flex:1;font-size:14px;font-weight:600}
+.score-val{font-size:13px;font-weight:700;color:var(--primary)}
+.grade-badge{font-size:10px;background:var(--primary-light);color:var(--primary);padding:2px 6px;border-radius:4px;font-weight:700}
+.divider{height:1px;background:var(--border);margin:20px 0}
+.screen{display:none}
+.screen.active{display:block;animation:fadeUp .28s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-brand">📚 류봉두의 국어수업</div>
+    <div class="topbar-sub">우리말 속담 마스터</div>
+  </div>
+  <div id="topbar-user" class="topbar-user"></div>
+</div>
+
+<!-- ══ 로그인 ══ -->
+<div id="screen-login" class="screen active">
+  <div class="card">
+    <span class="hero-emoji">📜</span>
+    <div class="hero-title">우리말 속담<br>마스터</div>
+    <div class="hero-desc">학번과 이름을 입력하고 퀴즈를 시작하세요.</div>
+    <div class="input-label">학번</div>
+    <input id="inp-sid"  class="input-field" type="text" placeholder="예) 1101" inputmode="numeric">
+    <div class="input-label">이름</div>
+    <input id="inp-name" class="input-field" type="text" placeholder="홍길동">
+    <div id="login-err" class="login-err"></div>
+    <button id="login-btn" class="btn-primary" onclick="doLogin()">로그인</button>
+  </div>
+</div>
+
+<!-- ══ 시작 ══ -->
+<div id="screen-start" class="screen">
+  <div class="card">
+    <span class="hero-emoji">📜</span>
+    <div class="hero-title">우리말 속담<br>마스터</div>
+
+    <div id="prev-record" class="prev-record">
+      <div class="prev-record-title">📊 이전 최고 기록</div>
+      <div id="prev-record-body" class="prev-record-body"></div>
+      <div id="prev-record-sub"  class="prev-record-sub"></div>
+    </div>
+
+    <!-- 모드 탭 -->
+    <div class="sel-label">모드 선택</div>
+    <div class="mode-tabs">
+      <div class="mode-tab active" id="tab-basic" onclick="selectMode('basic')">
+        <div class="mt-icon">📖</div>
+        <div class="mt-title">기본 모드</div>
+        <div class="mt-desc">4지선다<br>뜻·속담·상황·빈칸</div>
+      </div>
+      <div class="mode-tab" id="tab-adv" onclick="selectMode('adv')">
+        <div class="mt-icon">🔥</div>
+        <div class="mt-title">도전 모드</div>
+        <div class="mt-desc">주관식<br>지문 읽고 속담 쓰기</div>
+      </div>
+    </div>
+
+    <!-- 기본 모드 설정 -->
+    <div id="basic-options">
+      <div class="sel-label">문제 수</div>
+      <div class="sel-grid col3">
+        <div class="sel-btn" data-count="30" onclick="selectCount(this,30)">
+          <div class="s-main">30문제</div><div class="s-sub">약 10분</div>
+        </div>
+        <div class="sel-btn" data-count="50" onclick="selectCount(this,50)">
+          <div class="s-main">50문제</div><div class="s-sub">약 15분</div>
+        </div>
+        <div class="sel-btn active" data-count="100" onclick="selectCount(this,100)">
+          <div class="s-main">100문제</div><div class="s-sub">전체 도전</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 도전 모드 설정 -->
+    <div id="adv-options" style="display:none">
+      <div style="background:var(--warn-light);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:13px;color:#856404;line-height:1.6">
+        ✏️ 500자 내외 글을 읽고 어울리는 속담을 직접 입력하는 방식입니다.<br>
+        띄어쓰기·문장부호는 채점에서 무시됩니다. 활용형은 인정하지 않습니다.
+      </div>
+      <div class="sel-label">문제 수 (35개 지문에서 랜덤)</div>
+      <div class="sel-grid col2">
+        <div class="sel-btn adv-count active" data-acount="20" onclick="selectAdvCount(this,20)">
+          <div class="s-main">20문제</div><div class="s-sub">추천</div>
+        </div>
+        <div class="sel-btn adv-count" data-acount="35" onclick="selectAdvCount(this,35)">
+          <div class="s-main">35문제</div><div class="s-sub">전체</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startQuiz()">퀴즈 시작 →</button>
+  </div>
+
+  <div id="scoreboard-card" class="card" style="margin-top:12px;display:none">
+    <div class="section-title">🏆 기기 최고 기록</div>
+    <div id="score-list-start" class="score-list"></div>
+  </div>
+</div>
+
+<!-- ══ 퀴즈 (기본) ══ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="progress-bar-wrap">
+      <div id="progress-fill" class="progress-bar-fill" style="width:0%"></div>
+    </div>
+    <div class="quiz-meta">
+      <span id="quiz-progress">1 / 30</span>
+      <span id="quiz-score-badge" class="quiz-score-badge">0점</span>
+    </div>
+    <div class="live-level-wrap">
+      <span id="live-emoji"  class="live-emoji">🌰</span>
+      <div class="live-info">
+        <div id="live-title" class="live-title">류봉두의 떡잎</div>
+        <div id="live-sub"   class="live-sub">문제를 풀수록 레벨이 올라가요!</div>
+      </div>
+      <div class="live-right">
+        <div id="live-pct"  class="live-pct-num">-</div>
+        <div class="live-bar-bg"><div id="live-bar" class="live-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-card" class="card">
+    <span id="q-type-tag" class="q-type-tag"></span>
+    <div id="q-text"  class="q-text"></div>
+    <div id="q-hint"  class="q-hint no-hint"></div>
+    <div id="options-list" class="options-list"></div>
+    <div id="feedback-box" class="feedback-box">
+      <div id="fb-title"   class="fb-title"></div>
+      <div id="fb-meaning" class="fb-meaning"></div>
+      <div id="fb-example" class="fb-example"></div>
+    </div>
+    <button id="next-btn" class="btn-primary" onclick="nextQuestion()" style="display:none">다음 문제 →</button>
+  </div>
+</div>
+
+<!-- ══ 퀴즈 (도전) ══ -->
+<div id="screen-adv" class="screen">
+  <div class="quiz-header">
+    <div class="progress-bar-wrap">
+      <div id="adv-progress-fill" class="progress-bar-fill" style="width:0%"></div>
+    </div>
+    <div class="quiz-meta">
+      <span id="adv-progress">1 / 20</span>
+      <span id="adv-score-badge" class="quiz-score-badge">0점</span>
+    </div>
+    <div class="live-level-wrap">
+      <span id="adv-live-emoji"  class="live-emoji">🌰</span>
+      <div class="live-info">
+        <div id="adv-live-title" class="live-title">류봉두의 떡잎</div>
+        <div id="adv-live-sub"   class="live-sub">글을 읽고 속담을 입력하세요!</div>
+      </div>
+      <div class="live-right">
+        <div id="adv-live-pct"  class="live-pct-num">-</div>
+        <div class="live-bar-bg"><div id="adv-live-bar" class="live-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="adv-card" class="card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span id="adv-genre-badge" class="genre-badge"></span>
+      <span style="font-size:12px;color:var(--text3);font-weight:600" id="adv-prompt"></span>
+    </div>
+    <div id="adv-passage" class="passage-box"></div>
+    <div class="ans-input-wrap">
+      <input id="adv-input" class="ans-input" type="text" placeholder="속담을 입력하세요 (예: 가는 말이 고와야 오는 말이 곱다)" autocomplete="off">
+    </div>
+    <button id="adv-submit-btn" class="submit-btn" onclick="submitAdv()">✏️ 제출</button>
+    <div id="adv-feedback" class="feedback-box">
+      <div id="adv-fb-title"   class="fb-title"></div>
+      <div id="adv-fb-answer"  class="fb-meaning"></div>
+      <div id="adv-fb-meaning" class="fb-example"></div>
+    </div>
+    <button id="adv-next-btn" class="btn-primary" onclick="nextAdv()" style="display:none">다음 문제 →</button>
+  </div>
+</div>
+
+<!-- ══ 결과 ══ -->
+<div id="screen-result" class="screen">
+  <div class="card">
+    <div id="title-banner" class="title-banner">
+      <span id="banner-emoji" class="banner-emoji">🏆</span>
+      <div id="banner-title" class="banner-title"></div>
+      <div id="banner-sub"   class="banner-sub"></div>
+    </div>
+
+    <div class="result-stats">
+      <div class="rstat c"><div id="res-correct" class="rstat-num">0</div><div class="rstat-label">정답</div></div>
+      <div class="rstat w"><div id="res-wrong"   class="rstat-num">0</div><div class="rstat-label">오답</div></div>
+      <div class="rstat s"><div id="res-score"   class="rstat-num">0</div><div class="rstat-label">점수</div></div>
+    </div>
+
+    <button id="btn-send" class="btn-primary" onclick="sendToSheet()">📤 결과 전송하기</button>
+    <div id="send-status" class="send-status"></div>
+    <div class="divider"></div>
+    <button class="btn-secondary" onclick="retryQuiz()">🔄 같은 설정으로 다시</button>
+    <button class="btn-secondary" onclick="goHome()" style="margin-top:8px">🏠 처음으로</button>
+
+    <div id="wrong-section" style="display:none">
+      <div class="section-title">❌ 틀린 속담 <span id="wrong-count-badge" class="grade-badge"></span></div>
+      <div id="wrong-list" class="wrong-list"></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">🏆 기기 최고 기록</div>
+    <div id="score-list-result" class="score-list"></div>
+  </div>
+</div>
+
+<script>
+const PROVERBS=[
+{id:1,proverb:"가는 말이 고와야 오는 말이 곱다",meaning:"내가 남에게 말이나 행동을 좋게 해야 남도 나에게 좋게 대한다는 말.",example:"먼저 짜증을 내 놓고 왜 화를 내느냐고 하면 어쩌자는 거니. 가는 말이 고와야 오는 말이 곱지.",situation:"자기가 먼저 툭 쏘아붙여 놓고, 친구가 차갑게 대하자 서운해할 때",blank:"가는 ○이 고와야 오는 ○이 곱다",blankAns:"말",blankDis:["정", "값", "길"],conflict:[78]},
+{id:2,proverb:"가랑비에 옷 젖는 줄 모른다",meaning:"사소해 보이는 것도 자꾸 쌓이면 큰 손해나 결과가 된다는 말.",example:"하루에 천 원씩 쓴 것을 한 달 치 모아 보니 만만치 않다. 가랑비에 옷 젖는 줄 모른다더니.",situation:"매점에서 하루 오백 원씩 쓴 게 별것 아닌 줄 알았는데 한 달 용돈이 다 사라졌을 때",blank:"○○○에 옷 젖는 줄 모른다",blankAns:"가랑비",blankDis:["소나기", "이슬비", "진눈깨비"],conflict:[25, 97]},
+{id:3,proverb:"가까운 남이 먼 친척보다 낫다",meaning:"멀리 사는 친척보다 가까이서 자주 오가는 이웃이 오히려 더 도움이 된다는 말.",example:"급할 때 달려와 준 건 옆집 아주머니였다. 가까운 남이 먼 친척보다 낫다는 말 그대로다.",situation:"갑자기 아파 쓰러졌을 때 멀리 사는 삼촌보다 옆집 아주머니가 먼저 달려와 주었을 때",blank:"가까운 남이 먼 ○○보다 낫다",blankAns:"친척",blankDis:["이웃", "형제", "친구"],conflict:[]},
+{id:4,proverb:"가는 날이 장날이다",meaning:"어떤 일을 하려고 갔다가 뜻하지 않은 일을 공교롭게 만나게 됨을 이르는 말.",example:"오랜만에 도서관에 갔는데 하필 휴관일이었다. 가는 날이 장날이라더니.",situation:"모처럼 시간 내어 도서관에 갔더니 하필 휴관일이라 발길을 돌렸을 때",blank:"가는 날이 ○○이다",blankAns:"장날",blankDis:["생일", "잔칫날", "휴일"],conflict:[]},
+{id:5,proverb:"갈수록 태산이다",meaning:"갈수록 더 어렵고 힘든 처지에 놓이게 됨을 이르는 말.",example:"겨우 한 과목 끝냈더니 수행평가가 셋이나 남았다. 갈수록 태산이다.",situation:"겨우 수행평가 하나 끝냈더니 다음 주에 시험이 셋이나 잡혔을 때",blank:"갈수록 ○○이다",blankAns:"태산",blankDis:["고개", "산길", "절벽"],conflict:[]},
+{id:6,proverb:"같은 값이면 다홍치마",meaning:"값이 같거나 조건이 비슷하다면 더 좋고 마음에 드는 쪽을 고른다는 말.",example:"가격이 똑같다면 디자인이 예쁜 걸로 하자. 같은 값이면 다홍치마니까.",situation:"가격도 성능도 다를 게 없는 두 물건 앞에서 더 마음에 드는 색을 고를 때",blank:"같은 값이면 ○○○○",blankAns:"다홍치마",blankDis:["남색 치마", "무명 치마", "비단 저고리"],conflict:[]},
+{id:7,proverb:"개구리 올챙이 적 생각 못 한다",meaning:"형편이 나아진 사람이 어렵던 시절을 잊고 처음부터 잘난 듯이 굴 때 쓰는 말.",example:"작년까지 자기도 구구단을 헷갈리더니 이제 와 동생을 놀린다. 개구리 올챙이 적 생각 못 하네.",situation:"작년까지 구구단을 헷갈리던 아이가 이제 와 동생더러 그것도 모르냐고 놀릴 때",blank:"○○○ 올챙이 적 생각 못 한다",blankAns:"개구리",blankDis:["두꺼비", "미꾸라지", "도롱뇽"],conflict:[]},
+{id:8,proverb:"개천에서 용 난다",meaning:"변변찮은 환경이나 집안에서 훌륭한 인물이 나옴을 이르는 말.",example:"시골 작은 학교에서 전국 대회 1등이 나왔다. 개천에서 용 난다는 게 이런 거구나.",situation:"형편이 넉넉지 않은 집안에서 훌륭한 인물이 나왔을 때",blank:"○○에서 용 난다",blankAns:"개천",blankDis:["바다", "연못", "우물"],conflict:[75]},
+{id:9,proverb:"강 건너 불구경 한다",meaning:"자기와 상관없는 일이라 여겨 아무 관심 없이 바라보기만 함을 이르는 말.",example:"같은 모둠인데 혼자만 강 건너 불구경하듯 앉아 있었다.",situation:"같은 모둠인데 혼자만 손도 안 대고 남 일 보듯 앉아 있을 때",blank:"○ 건너 불구경 한다",blankAns:"강",blankDis:["산", "들", "담"],conflict:[]},
+{id:10,proverb:"공든 탑이 무너지랴",meaning:"정성과 노력을 다해 이룬 일은 그 결과가 헛되지 않다는 말.",example:"석 달을 하루도 안 빠지고 연습했으니 잘될 거야. 공든 탑이 무너지겠니.",situation:"석 달을 하루도 안 빠지고 연습했으니 잘될 거라며 서로를 다독일 때",blank:"○○ 탑이 무너지랴",blankAns:"공든",blankDis:["높은", "낡은", "쌓은"],conflict:[]},
+{id:11,proverb:"귀에 걸면 귀걸이 코에 걸면 코걸이",meaning:"어떤 사물이나 규정이 보기에 따라 이렇게도 저렇게도 해석될 수 있음을 이르는 말.",example:"그 규정은 귀에 걸면 귀걸이 코에 걸면 코걸이라 사람마다 다르게 적용한다.",situation:"같은 교칙인데 어떤 때는 이렇게, 어떤 때는 저렇게 해석해 적용할 때",blank:"귀에 걸면 귀걸이 ○에 걸면 ○걸이",blankAns:"코",blankDis:["목", "팔", "발"],conflict:[]},
+{id:12,proverb:"그림의 떡",meaning:"아무리 마음에 들어도 실제로 차지하거나 이용할 수 없는 것을 이르는 말.",example:"진열장 속 새 자전거는 나에게 그림의 떡이었다.",situation:"진열장 속 값비싼 악기를 한참 들여다보다 그냥 돌아설 때",blank:"○○의 떡",blankAns:"그림",blankDis:["사진", "꿈속", "무지개"],conflict:[]},
+{id:13,proverb:"구슬이 서 말이라도 꿰어야 보배다",meaning:"아무리 훌륭하고 좋은 것이라도 다듬어 쓸모 있게 만들어야 값어치가 있다는 말.",example:"자료만 잔뜩 모아 놓으면 뭐 하니. 구슬이 서 말이라도 꿰어야 보배지.",situation:"좋은 자료를 잔뜩 모아 두고도 정리를 안 해 발표에 하나도 못 쓸 때",blank:"○○이 서 말이라도 꿰어야 보배다",blankAns:"구슬",blankDis:["진주", "보석", "옥돌"],conflict:[]},
+{id:14,proverb:"남아일언중천금",meaning:"남자의 말 한마디는 천금같이 무거우니, 한번 내뱉은 말은 반드시 지켜야 한다는 말.",example:"약속했으면 지켜야지. 남아일언중천금이라잖아.",situation:"한번 하겠다고 약속한 이상 힘들어도 끝까지 지켜야 한다고 다짐할 때",blank:"○○일언중천금",blankAns:"남아",blankDis:["군자", "대장", "사내"],conflict:[]},
+{id:15,proverb:"낮말은 새가 듣고 밤말은 쥐가 듣는다",meaning:"아무도 듣지 않는 데서도 말은 새어 나가기 마련이니 늘 조심해야 한다는 말.",example:"교실에서 그런 얘기를 하면 어떡하니. 낮말은 새가 듣고 밤말은 쥐가 듣는다.",situation:"교실에 아무도 없는 줄 알고 흉을 봤는데 그 말이 다음 날 퍼져 있을 때",blank:"낮말은 새가 듣고 밤말은 ○가 듣는다",blankAns:"쥐",blankDis:["개", "소", "닭"],conflict:[80]},
+{id:16,proverb:"다 된 밥에 재 뿌리기",meaning:"거의 다 이루어진 일을 마지막에 그르쳐 놓는 것을 이르는 말.",example:"발표 직전에 파일을 지워 버렸으니 다 된 밥에 재 뿌린 셈이다.",situation:"다 준비해 둔 발표 자료를 발표 직전에 누가 지워 버렸을 때",blank:"다 된 밥에 ○ 뿌리기",blankAns:"재",blankDis:["물", "돌", "흙"],conflict:[]},
+{id:17,proverb:"도둑이 제 발 저린다",meaning:"지은 죄가 있으면 스스로 마음이 조마조마해 저절로 티가 난다는 말.",example:"아무도 묻지 않았는데 먼저 변명을 늘어놓더라. 도둑이 제 발 저린다더니.",situation:"아무도 묻지 않았는데 먼저 나서서 자기는 안 그랬다고 변명할 때",blank:"○○이 제 발 저린다",blankAns:"도둑",blankDis:["주인", "나그네", "거지"],conflict:[77]},
+{id:18,proverb:"돌다리도 두드려 보고 건넌다",meaning:"잘 아는 일이라도 소홀히 하지 말고 꼼꼼히 확인한 뒤에 해야 한다는 말.",example:"다 풀었어도 한 번 더 검산해라. 돌다리도 두드려 보고 건너야지.",situation:"매일 다니는 길인데도 출발 전에 준비물을 한 번 더 확인할 때",blank:"○○○도 두드려 보고 건넌다",blankAns:"돌다리",blankDis:["외나무", "징검다리", "나무다리"],conflict:[90]},
+{id:19,proverb:"등잔 밑이 어둡다",meaning:"가까이에 있는 것을 오히려 잘 알지 못함을 이르는 말.",example:"온 집을 뒤졌는데 안경이 머리 위에 있었다. 등잔 밑이 어둡다.",situation:"온 집을 뒤졌는데 잃어버린 열쇠가 바로 책상 위에 있었을 때",blank:"○○ 밑이 어둡다",blankAns:"등잔",blankDis:["처마", "부뚜막", "서까래"],conflict:[]},
+{id:20,proverb:"마른하늘에 날벼락",meaning:"뜻하지 않게 갑자기 닥친 불행이나 재난을 이르는 말.",example:"멀쩡하던 컴퓨터가 제출 직전에 꺼졌다. 마른하늘에 날벼락이다.",situation:"멀쩡히 잘 지내던 집에 갑자기 큰 사고 소식이 날아들었을 때",blank:"○○○○에 날벼락",blankAns:"마른하늘",blankDis:["먹구름", "한밤중", "봄바람"],conflict:[32]},
+{id:21,proverb:"목구멍이 포도청이다",meaning:"먹고살기 위해서는 차마 하지 못할 일까지 하게 됨을 이르는 말.",example:"그 힘든 일을 왜 하시느냐 여쭈니, 목구멍이 포도청이라고 하셨다.",situation:"하기 싫고 부끄러운 일이지만 당장 먹고살려니 어쩔 수 없이 나설 때",blank:"○○○이 포도청이다",blankAns:"목구멍",blankDis:["뱃속", "살림살이", "입버릇"],conflict:[36]},
+{id:22,proverb:"믿는 도끼에 발등 찍힌다",meaning:"잘되리라 믿었던 일이나 굳게 믿던 사람에게 도리어 해를 입는다는 말.",example:"제일 친한 친구가 소문을 냈다니. 믿는 도끼에 발등 찍힌다.",situation:"가장 아끼던 후배가 뒤에서 자기 험담을 하고 다녔다는 걸 알았을 때",blank:"믿는 ○○에 발등 찍힌다",blankAns:"도끼",blankDis:["지팡이", "낫자루", "망치"],conflict:[]},
+{id:23,proverb:"밑 빠진 독에 물 붓기",meaning:"아무리 애를 써도 보람 없이 헛수고가 되는 일을 이르는 말.",example:"저축은 안 하고 쓰기만 하니 용돈을 올려 줘도 밑 빠진 독에 물 붓기다.",situation:"아무리 용돈을 넣어 줘도 금세 다 써 버려 저축이 하나도 안 될 때",blank:"○ 빠진 독에 물 붓기",blankAns:"밑",blankDis:["금", "목", "뚜껑"],conflict:[92]},
+{id:24,proverb:"백지장도 맞들면 낫다",meaning:"아무리 쉬운 일이라도 서로 힘을 합하면 훨씬 수월하다는 말.",example:"둘이 같이 치우자. 백지장도 맞들면 낫다잖아.",situation:"혼자 옮기기 어렵지 않은 짐이지만 둘이 드니 훨씬 가벼웠을 때",blank:"○○○도 맞들면 낫다",blankAns:"백지장",blankDis:["바윗돌", "쌀가마", "나뭇짐"],conflict:[]},
+{id:25,proverb:"바늘 도둑이 소도둑 된다",meaning:"작은 나쁜 짓도 자꾸 하다 보면 나중에는 큰 죄를 저지르게 된다는 말.",example:"지우개 하나라도 말없이 가져오면 안 된다. 바늘 도둑이 소도둑 되는 법이야.",situation:"남의 지우개를 슬쩍하던 버릇이 자라 더 큰 잘못으로 이어질까 걱정될 때",blank:"○○ 도둑이 소도둑 된다",blankAns:"바늘",blankDis:["실", "엽전", "계란"],conflict:[2, 27]},
+{id:26,proverb:"배보다 배꼽이 더 크다",meaning:"마땅히 중심이 되어야 할 것보다 곁딸린 것이 더 크거나 많음을 이르는 말.",example:"만 원짜리 물건에 배송비가 만 오천 원이라니, 배보다 배꼽이 더 크다.",situation:"오천 원짜리 물건을 사는데 배송비가 팔천 원 나왔을 때",blank:"배보다 ○○이 더 크다",blankAns:"배꼽",blankDis:["등짝", "어깨", "손톱"],conflict:[]},
+{id:27,proverb:"세 살 버릇 여든까지 간다",meaning:"어릴 때 몸에 밴 버릇은 늙어서까지 고치기 어려우니 처음부터 잘 들여야 한다는 말.",example:"지금부터 바르게 앉는 습관을 들여라. 세 살 버릇 여든까지 간다.",situation:"어릴 때 들인 나쁜 습관이 어른이 되어서도 그대로 남아 있을 때",blank:"세 살 ○○ 여든까지 간다",blankAns:"버릇",blankDis:["고집", "성질", "말버릇"],conflict:[25]},
+{id:28,proverb:"서당 개 삼 년이면 풍월을 읊는다",meaning:"어떤 분야에 대해 모르던 사람도 오래 보고 들으면 어느 정도는 알게 된다는 말.",example:"형 옆에서 구경만 하더니 기타 코드를 다 외웠네. 서당 개 삼 년이면 풍월을 읊는다더니.",situation:"배운 적 없는데 곁에서 오래 지켜본 덕에 어느새 흉내를 낼 줄 알게 됐을 때",blank:"○○ 개 삼 년이면 풍월을 읊는다",blankAns:"서당",blankDis:["절간", "사랑방", "대감댁"],conflict:[]},
+{id:29,proverb:"십 년이면 강산도 변한다",meaning:"세월이 흐르면 무엇이든 다 변하기 마련이라는 말.",example:"졸업하고 십 년 만에 오니 온 동네가 몰라보게 바뀌었다. 십 년이면 강산도 변한다.",situation:"오랜만에 고향에 갔더니 골목도 가게도 몰라보게 달라져 있을 때",blank:"십 년이면 ○○도 변한다",blankAns:"강산",blankDis:["인심", "사람", "물길"],conflict:[]},
+{id:30,proverb:"열 번 찍어 안 넘어가는 나무 없다",meaning:"여러 번 꾸준히 노력하면 이루지 못할 일이 없다는 말.",example:"계속 부탁드려 보자. 열 번 찍어 안 넘어가는 나무 없다잖아.",situation:"한 번 거절당했다고 포기하지 않고 계속 부탁해 결국 승낙을 받아 냈을 때",blank:"○ 번 찍어 안 넘어가는 나무 없다",blankAns:"열",blankDis:["세", "다섯", "백"],conflict:[]},
+{id:31,proverb:"아니 땐 굴뚝에 연기 나랴",meaning:"원인이 없으면 결과가 있을 수 없다는 뜻으로, 소문에는 그럴 만한 까닭이 있다는 말.",example:"그런 말이 왜 나왔겠니. 아니 땐 굴뚝에 연기 나랴.",situation:"그런 소문이 도는 데는 그럴 만한 까닭이 있을 거라고 짐작할 때",blank:"아니 땐 ○○에 연기 나랴",blankAns:"굴뚝",blankDis:["아궁이", "화롯불", "부엌"],conflict:[43]},
+{id:32,proverb:"아닌 밤중에 홍두깨",meaning:"뜻밖의 말이나 일을 갑작스럽게 당하게 됨을 이르는 말.",example:"갑자기 나더러 반장을 하라니, 아닌 밤중에 홍두깨다.",situation:"한참 다른 얘기를 하던 중에 난데없는 소식을 갑자기 전해 들었을 때",blank:"아닌 밤중에 ○○○",blankAns:"홍두깨",blankDis:["방망이", "도깨비", "다듬잇돌"],conflict:[20, 94]},
+{id:33,proverb:"열 길 물속은 알아도 한 길 사람 속은 모른다",meaning:"사람의 속마음은 겉으로 드러나지 않아 헤아리기가 몹시 어렵다는 말.",example:"그렇게 순해 보이던 사람이 그럴 줄이야. 열 길 물속은 알아도 한 길 사람 속은 모른다.",situation:"몇 년을 같이 지낸 친구인데도 무슨 생각을 하는지 도무지 알 수 없을 때",blank:"열 길 물속은 알아도 한 길 ○○ 속은 모른다",blankAns:"사람",blankDis:["친구", "형제", "이웃"],conflict:[64]},
+{id:34,proverb:"오뉴월 감기는 개도 안 앓는다",meaning:"한여름에 감기를 앓는 사람을 놀리는 말.",example:"한여름에 콧물이라니. 오뉴월 감기는 개도 안 앓는다는데.",situation:"한여름에 콧물을 훌쩍이는 친구를 놀릴 때",blank:"○○○ 감기는 개도 안 앓는다",blankAns:"오뉴월",blankDis:["동짓달", "섣달", "삼사월"],conflict:[]},
+{id:35,proverb:"우물에 가서 숭늉 찾는다",meaning:"일에는 순서가 있는데 성미가 급해 절차를 건너뛰고 성급하게 덤빔을 이르는 말.",example:"이제 막 시작했는데 결과부터 내놓으라니, 우물에 가서 숭늉 찾는 격이다.",situation:"이제 막 재료를 다듬기 시작했는데 왜 아직 안 나오냐고 재촉할 때",blank:"○○에 가서 숭늉 찾는다",blankAns:"우물",blankDis:["부엌", "논밭", "절간"],conflict:[76]},
+{id:36,proverb:"울며 겨자 먹기",meaning:"싫은 일을 어쩔 수 없이 억지로 하게 됨을 이르는 말.",example:"아무도 안 맡겠다고 해서 울며 겨자 먹기로 내가 맡았다.",situation:"하기 싫은 청소 당번이지만 정해진 순서라 어쩔 수 없이 빗자루를 들 때",blank:"울며 ○○ 먹기",blankAns:"겨자",blankDis:["고추", "생강", "마늘"],conflict:[21]},
+{id:37,proverb:"원숭이도 나무에서 떨어진다",meaning:"아무리 익숙하고 잘하는 사람이라도 실수할 때가 있다는 말.",example:"반에서 제일 잘하는 애가 1번을 틀렸다. 원숭이도 나무에서 떨어지는구나.",situation:"십 년을 해 온 선생님도 칠판에 글씨를 틀리게 쓸 때가 있을 때",blank:"○○○도 나무에서 떨어진다",blankAns:"원숭이",blankDis:["다람쥐", "청설모", "까치"],conflict:[]},
+{id:38,proverb:"윗물이 맑아야 아랫물이 맑다",meaning:"윗사람이 바르게 행동해야 아랫사람도 그것을 본받아 바르게 된다는 말.",example:"선생님부터 시간을 지키셔야죠. 윗물이 맑아야 아랫물이 맑습니다.",situation:"선배들이 규칙을 안 지키니 후배들도 똑같이 따라 하게 됐을 때",blank:"○○이 맑아야 아랫물이 맑다",blankAns:"윗물",blankDis:["샘물", "강물", "우물"],conflict:[]},
+{id:39,proverb:"자라 보고 놀란 가슴 솥뚜껑 보고 놀란다",meaning:"어떤 일에 크게 놀란 뒤에는 그와 비슷한 것만 보아도 겁을 낸다는 말.",example:"한 번 물린 뒤로는 강아지만 봐도 피한다. 자라 보고 놀란 가슴 솥뚜껑 보고 놀란다더니.",situation:"물에 빠진 적이 있어 그 뒤로는 얕은 개울만 봐도 다리가 굳을 때",blank:"○○ 보고 놀란 가슴 솥뚜껑 보고 놀란다",blankAns:"자라",blankDis:["거북", "두꺼비", "개구리"],conflict:[]},
+{id:40,proverb:"지렁이도 밟으면 꿈틀한다",meaning:"아무리 순하고 힘없는 사람이라도 지나치게 업신여기면 맞서기 마련이라는 말.",example:"그만해라. 지렁이도 밟으면 꿈틀한다.",situation:"한 번도 화낸 적 없던 아이가 계속 놀림을 당하자 결국 맞받아쳤을 때",blank:"○○○도 밟으면 꿈틀한다",blankAns:"지렁이",blankDis:["달팽이", "개미", "굼벵이"],conflict:[]},
+{id:41,proverb:"천 리 길도 한 걸음부터",meaning:"아무리 큰일이라도 그 시작은 작은 한 걸음에서 비롯된다는 말.",example:"오늘은 한 쪽만 읽자. 천 리 길도 한 걸음부터니까.",situation:"삼백 쪽짜리 책이 막막하지만 일단 오늘 다섯 쪽부터 읽기로 할 때",blank:"천 리 길도 ○ 걸음부터",blankAns:"한",blankDis:["두", "열", "백"],conflict:[89]},
+{id:42,proverb:"참새가 방앗간을 그냥 지나랴",meaning:"자기가 좋아하는 것을 보고는 그냥 지나치지 못함을 이르는 말.",example:"서점 앞을 지나다 또 들어갔다. 참새가 방앗간을 그냥 지나겠니.",situation:"서점 앞을 지날 때마다 그대로 못 지나치고 꼭 들어가 보게 될 때",blank:"○○가 방앗간을 그냥 지나랴",blankAns:"참새",blankDis:["제비", "까치", "비둘기"],conflict:[]},
+{id:43,proverb:"콩 심은 데 콩 나고 팥 심은 데 팥 난다",meaning:"모든 일은 그 원인에 따라 거기에 맞는 결과가 나타난다는 말.",example:"매일 미뤄 놓고 좋은 성적을 바라니. 콩 심은 데 콩 나고 팥 심은 데 팥 나는 법이다.",situation:"평소 성실하던 아이가 좋은 결과를 받은 걸 두고 당연하다고 말할 때",blank:"콩 심은 데 콩 나고 ○ 심은 데 ○ 난다",blankAns:"팥",blankDis:["벼", "조", "밀"],conflict:[31]},
+{id:44,proverb:"팔은 안으로 굽는다",meaning:"사람은 자기와 가까운 사람에게 정이 쏠리고 그편을 들게 마련이라는 말.",example:"심판이 자기 학교 편을 드는 것 같았다. 팔은 안으로 굽는다더니.",situation:"잘잘못을 따지기 전에 자기 동생 편부터 들고 나설 때",blank:"○은 안으로 굽는다",blankAns:"팔",blankDis:["손", "등", "다리"],conflict:[61]},
+{id:45,proverb:"하늘이 무너져도 솟아날 구멍이 있다",meaning:"아무리 어려운 처지에 놓이더라도 벗어날 방법은 있다는 말.",example:"포기하지 마라. 하늘이 무너져도 솟아날 구멍이 있다.",situation:"일이 최악까지 갔지만 그래도 길이 아주 없지는 않다고 서로 다독일 때",blank:"하늘이 무너져도 솟아날 ○○이 있다",blankAns:"구멍",blankDis:["틈새", "길목", "사다리"],conflict:[66, 96]},
+{id:46,proverb:"한 귀로 듣고 한 귀로 흘린다",meaning:"남의 말을 귀담아듣지 않고 곧 잊어버림을 이르는 말.",example:"몇 번을 말해도 한 귀로 듣고 한 귀로 흘리는구나.",situation:"몇 번을 일러 줘도 돌아서면 잊어버리고 똑같은 실수를 반복할 때",blank:"한 ○로 듣고 한 ○로 흘린다",blankAns:"귀",blankDis:["눈", "손", "입"],conflict:[]},
+{id:47,proverb:"호랑이도 제 말 하면 온다",meaning:"다른 사람의 이야기를 하는데 공교롭게 그 사람이 나타남을 이르는 말.",example:"방금 네 얘기를 하고 있었는데. 호랑이도 제 말 하면 온다더니.",situation:"친구 얘기를 하고 있는데 마침 그 친구가 문을 열고 들어왔을 때",blank:"○○○도 제 말 하면 온다",blankAns:"호랑이",blankDis:["늑대", "여우", "곰"],conflict:[]},
+{id:48,proverb:"호랑이는 죽어서 가죽을 남기고 사람은 죽어서 이름을 남긴다",meaning:"사람은 살아 있는 동안 훌륭한 일을 해 좋은 이름을 남겨야 한다는 말.",example:"재산보다 이름이라고 하셨다. 호랑이는 죽어서 가죽을 남기고 사람은 죽어서 이름을 남긴다고.",situation:"살아 있는 동안 훌륭한 일을 해 두어야 한다고 어른들이 당부하실 때",blank:"호랑이는 죽어서 가죽을 남기고 사람은 죽어서 ○○을 남긴다",blankAns:"이름",blankDis:["재산", "자식", "발자국"],conflict:[]},
+{id:49,proverb:"바다는 메워도 사람의 욕심은 못 채운다",meaning:"사람의 욕심은 끝이 없어 아무리 채워도 만족을 모른다는 말.",example:"하나를 얻으면 곧 둘을 바란다. 바다는 메워도 사람의 욕심은 못 채운다.",situation:"원하던 것을 다 얻고도 곧바로 더 큰 것을 바라기 시작할 때",blank:"바다는 메워도 사람의 ○○은 못 채운다",blankAns:"욕심",blankDis:["마음", "근심", "미움"],conflict:[]},
+{id:50,proverb:"못된 송아지 엉덩이에 뿔 난다",meaning:"못된 사람일수록 건방지고 좋지 못한 짓만 골라 한다는 말.",example:"잘못해 놓고 되레 큰소리다. 못된 송아지 엉덩이에 뿔 난다더니.",situation:"평소 말썽만 부리던 아이가 잘못을 지적받자 도리어 더 뻣뻣하게 굴 때",blank:"못된 ○○○ 엉덩이에 뿔 난다",blankAns:"송아지",blankDis:["망아지", "강아지", "병아리"],conflict:[]},
+{id:51,proverb:"모난 돌이 정 맞는다",meaning:"두드러지게 남과 다르거나 유별나게 구는 사람이 남에게 미움을 받는다는 말.",example:"너무 나서지 마라. 모난 돌이 정 맞는다.",situation:"혼자만 튀는 행동을 하다가 여기저기서 눈총을 받게 됐을 때",blank:"○○ 돌이 정 맞는다",blankAns:"모난",blankDis:["작은", "굳은", "둥근"],conflict:[]},
+{id:52,proverb:"달면 삼키고 쓰면 뱉는다",meaning:"자기에게 이로우면 가까이하고 해로우면 버리는 이기적인 태도를 이르는 말.",example:"필요할 때만 연락하다니, 달면 삼키고 쓰면 뱉는 사람이다.",situation:"필요할 때만 살갑게 굴다가 아쉬울 게 없어지자 뚝 연락을 끊을 때",blank:"달면 ○○○ 쓰면 뱉는다",blankAns:"삼키고",blankDis:["감추고", "남기고", "물고"],conflict:[]},
+{id:53,proverb:"내일은 해가 서쪽에서 뜨겠다",meaning:"평소와 전혀 다른 뜻밖의 행동을 할 때 놀리듯 이르는 말.",example:"네가 먼저 청소를 다 해 놓다니. 내일은 해가 서쪽에서 뜨겠다.",situation:"늦잠만 자던 아이가 새벽부터 일어나 책상에 앉아 있을 때",blank:"내일은 해가 ○○에서 뜨겠다",blankAns:"서쪽",blankDis:["동쪽", "남쪽", "북쪽"],conflict:[]},
+{id:54,proverb:"꿩 대신 닭",meaning:"꼭 알맞은 것이 없을 때 그와 비슷한 것으로 대신함을 이르는 말.",example:"물감이 없어서 꿩 대신 닭으로 색연필을 썼다.",situation:"찾던 재료가 없어 비슷한 것으로 바꿔 요리를 마무리했을 때",blank:"○ 대신 닭",blankAns:"꿩",blankDis:["소", "말", "개"],conflict:[]},
+{id:55,proverb:"바늘로 찔러도 피 한 방울 안 나온다",meaning:"사람됨이 지나치게 야무지거나, 인정이라고는 없이 몹시 냉정함을 이르는 말.",example:"사정을 말해도 눈 하나 깜짝 않는다. 바늘로 찔러도 피 한 방울 안 나올 사람이야.",situation:"사정을 아무리 이야기해도 눈 하나 깜짝 않고 차갑게 자를 때",blank:"○○로 찔러도 피 한 방울 안 나온다",blankAns:"바늘",blankDis:["송곳", "칼끝", "창"],conflict:[59]},
+{id:56,proverb:"까마귀 날자 배 떨어진다",meaning:"아무 관계 없이 우연히 동시에 일어난 일 때문에 공연히 의심을 받게 됨을 이르는 말.",example:"내가 만지자마자 고장이 났으니 까마귀 날자 배 떨어진 격이다.",situation:"자리를 뜬 직후에 물건이 없어져 괜히 의심을 사게 됐을 때",blank:"○○○ 날자 배 떨어진다",blankAns:"까마귀",blankDis:["까치", "참새", "기러기"],conflict:[]},
+{id:57,proverb:"되로 주고 말로 받는다",meaning:"조금 주고 그 대가로 훨씬 많이 받는다는 뜻으로, 남을 조금 괴롭혔다가 크게 당할 때도 쓰는 말.",example:"장난 한 번 쳤다가 되로 주고 말로 받았다.",situation:"장난삼아 한 번 놀렸다가 훨씬 크게 되돌려 받았을 때",blank:"○로 주고 말로 받는다",blankAns:"되",blankDis:["홉", "섬", "자"],conflict:[]},
+{id:58,proverb:"뛰는 놈 위에 나는 놈 있다",meaning:"아무리 잘난 사람이라도 그보다 나은 사람이 반드시 있다는 말.",example:"우승할 줄 알았는데 결승에서 졌다. 뛰는 놈 위에 나는 놈 있다.",situation:"반에서 제일 잘하는 줄 알았는데 대회에 나가 보니 위가 한참 있었을 때",blank:"뛰는 놈 위에 ○○ 놈 있다",blankAns:"나는",blankDis:["걷는", "앉은", "숨은"],conflict:[]},
+{id:59,proverb:"벼룩의 간 빼먹기",meaning:"몹시 어려운 처지의 사람에게서 이익을 취하는, 인색하고 야박한 짓을 이르는 말.",example:"용돈 삼천 원에서 뺏어 가려 하다니, 벼룩의 간 빼먹기다.",situation:"가진 것도 없는 사람에게서 굳이 얼마를 더 뜯어내려 할 때",blank:"○○의 간 빼먹기",blankAns:"벼룩",blankDis:["빈대", "모기", "개미"],conflict:[55]},
+{id:60,proverb:"사공이 많으면 배가 산으로 간다",meaning:"여러 사람이 저마다 제 주장만 내세우면 일이 엉뚱한 방향으로 흘러간다는 말.",example:"다들 자기 뜻대로 하자고 하니 회의가 끝나질 않는다. 사공이 많으면 배가 산으로 간다.",situation:"회의에서 저마다 제 주장만 하다 결국 엉뚱한 결론이 나 버렸을 때",blank:"○○이 많으면 배가 산으로 간다",blankAns:"사공",blankDis:["뱃사람", "손님", "짐꾼"],conflict:[]},
+{id:61,proverb:"가재는 게 편이다",meaning:"형편이나 처지가 비슷한 사람끼리 서로 사정을 봐주고 편을 들어 준다는 말.",example:"둘 다 같은 반이라고 서로 감싸 준다. 가재는 게 편이다.",situation:"같은 처지의 친구끼리 서로 잘못을 덮어 주고 편들어 줄 때",blank:"○○는 게 편이다",blankAns:"가재",blankDis:["새우", "미꾸라지", "지렁이"],conflict:[44]},
+{id:62,proverb:"가지 많은 나무에 바람 잘 날 없다",meaning:"자식을 많이 둔 부모는 걱정이 끊일 날이 없다는 말.",example:"삼 남매를 키우시느라 늘 바쁘시다. 가지 많은 나무에 바람 잘 날 없다더니.",situation:"자식이 여럿이라 이 걱정 저 걱정 끊이지 않는다는 어머니 말씀",blank:"가지 많은 나무에 ○○ 잘 날 없다",blankAns:"바람",blankDis:["서리", "안개", "그늘"],conflict:[100]},
+{id:63,proverb:"개똥도 약에 쓰려면 없다",meaning:"흔하던 것도 정작 필요해서 찾으면 눈에 띄지 않는다는 말.",example:"볼펜이 그렇게 굴러다니더니 시험 날엔 하나도 없다. 개똥도 약에 쓰려면 없다.",situation:"책상에 굴러다니던 볼펜이 정작 시험 시간에는 하나도 안 보일 때",blank:"○○도 약에 쓰려면 없다",blankAns:"개똥",blankDis:["소똥", "지푸라기", "쑥"],conflict:[]},
+{id:64,proverb:"겉 다르고 속 다르다",meaning:"겉으로 드러내는 말이나 행동이 속마음과 서로 다름을 이르는 말.",example:"앞에서는 웃고 뒤에서는 험담이라니, 겉 다르고 속 다른 사람이다.",situation:"앞에서는 웃으며 칭찬하고 돌아서서는 험담을 하고 다닐 때",blank:"○ 다르고 속 다르다",blankAns:"겉",blankDis:["앞", "밖", "껍질"],conflict:[33, 72]},
+{id:65,proverb:"고래 싸움에 새우 등 터진다",meaning:"강한 자들끼리 다투는 통에 아무 상관 없는 약한 자가 피해를 본다는 말.",example:"두 형이 다투는 통에 내 물건이 부서졌다. 고래 싸움에 새우 등 터진 격이다.",situation:"힘센 두 사람이 다투는 통에 아무 상관 없던 아이가 다쳤을 때",blank:"○○ 싸움에 새우 등 터진다",blankAns:"고래",blankDis:["상어", "물개", "잉어"],conflict:[]},
+{id:66,proverb:"고생 끝에 낙이 온다",meaning:"어려운 일을 견디고 나면 반드시 즐겁고 좋은 날이 온다는 말.",example:"삼 년을 참고 준비한 끝에 합격했다. 고생 끝에 낙이 온다.",situation:"몇 해를 힘들게 버티고 나서 마침내 좋은 소식을 듣게 됐을 때",blank:"○○ 끝에 낙이 온다",blankAns:"고생",blankDis:["고집", "근심", "눈물"],conflict:[45, 96]},
+{id:67,proverb:"낫 놓고 기역 자도 모른다",meaning:"기역 자 모양의 낫을 앞에 두고도 그 글자를 모른다는 뜻으로, 아주 무식함을 이르는 말.",example:"기본 용어조차 모르니 낫 놓고 기역 자도 모르는 셈이다.",situation:"눈앞에 답이 뻔히 있는데도 그게 무엇인지 전혀 알아보지 못할 때",blank:"○ 놓고 기역 자도 모른다",blankAns:"낫",blankDis:["칼", "호미", "삽"],conflict:[93]},
+{id:68,proverb:"남의 떡이 커 보인다",meaning:"자기 것보다 남의 것이 더 좋아 보이는 사람의 마음을 이르는 말.",example:"짝꿍 도시락이 더 맛있어 보였다. 남의 떡이 커 보인다더니.",situation:"똑같이 나눠 가졌는데도 친구 몫이 더 커 보여 자꾸 눈이 갈 때",blank:"남의 ○이 커 보인다",blankAns:"떡",blankDis:["밥", "집", "몫"],conflict:[85]},
+{id:69,proverb:"남의 잔치에 감 놔라 배 놔라 한다",meaning:"자기와 상관없는 일에 쓸데없이 끼어들어 참견함을 이르는 말.",example:"우리 모둠 일에 왜 끼어드니. 남의 잔치에 감 놔라 배 놔라 하네.",situation:"자기와 상관없는 모둠 일에 끼어들어 이래라저래라 지시할 때",blank:"남의 잔치에 ○ 놔라 배 놔라 한다",blankAns:"감",blankDis:["상", "술", "떡"],conflict:[]},
+{id:70,proverb:"누워서 떡 먹기",meaning:"힘들이지 않고도 아주 쉽게 할 수 있는 일을 이르는 말.",example:"이 정도 문제는 누워서 떡 먹기다.",situation:"몇 번이나 해 본 일이라 눈 감고도 해낼 만큼 쉬울 때",blank:"누워서 ○ 먹기",blankAns:"떡",blankDis:["밥", "죽", "엿"],conflict:[]},
+{id:71,proverb:"누워서 침 뱉기",meaning:"남을 해치려다 도리어 자기가 해를 입게 됨을 이르는 말.",example:"자기 반 흉을 보고 다니면 누워서 침 뱉기다.",situation:"우리 반 흉을 보고 다니다가 결국 자기 얼굴에 먹칠을 하게 됐을 때",blank:"누워서 ○ 뱉기",blankAns:"침",blankDis:["씨", "물", "말"],conflict:[]},
+{id:72,proverb:"눈 가리고 아웅",meaning:"속이 빤히 들여다보이는 얕은 수로 남을 속이려 함을 이르는 말.",example:"답을 베껴 놓고 안 봤다고 하면 눈 가리고 아웅이지.",situation:"들통날 게 뻔한 거짓말로 어떻게든 넘어가 보려 할 때",blank:"눈 가리고 ○○",blankAns:"아웅",blankDis:["까꿍", "술래", "숨바꼭질"],conflict:[64]},
+{id:73,proverb:"달걀로 바위 치기",meaning:"도저히 맞설 수 없는 상대에게 무모하게 덤벼듦을 이르는 말.",example:"준비도 없이 전국 1위와 붙겠다니, 달걀로 바위 치기다.",situation:"상대가 되지 않을 만큼 강한 팀에 무작정 덤벼들었을 때",blank:"○○로 바위 치기",blankAns:"달걀",blankDis:["주먹", "돌멩이", "방망이"],conflict:[99]},
+{id:74,proverb:"도토리 키 재기",meaning:"정도가 고만고만한 것끼리 서로 낫다고 겨루거나 다툼을 이르는 말.",example:"둘 다 한 점 차이면서 다투기는. 도토리 키 재기다.",situation:"실력이 고만고만한 둘이 서로 자기가 낫다고 우길 때",blank:"○○○ 키 재기",blankAns:"도토리",blankDis:["콩나물", "개구리", "밤송이"],conflict:[]},
+{id:75,proverb:"될성부른 나무는 떡잎부터 알아본다",meaning:"앞으로 잘될 사람은 어릴 때부터 남다른 데가 있다는 말.",example:"1학년 때부터 눈에 띄더니 결국 대표가 됐다. 될성부른 나무는 떡잎부터 알아본다.",situation:"어릴 때부터 남다른 구석이 보이던 아이가 결국 크게 되었을 때",blank:"될성부른 나무는 ○○부터 알아본다",blankAns:"떡잎",blankDis:["뿌리", "열매", "가지"],conflict:[8, 98]},
+{id:76,proverb:"떡 줄 사람은 꿈도 안 꾸는데 김칫국부터 마신다",meaning:"상대는 생각도 없는데 지레 다 된 것처럼 기대하고 서두름을 이르는 말.",example:"아직 뽑지도 않았는데 벌써 축하를 받네. 떡 줄 사람은 꿈도 안 꾸는데 김칫국부터 마신다.",situation:"아직 뽑히지도 않았는데 벌써 상 받을 준비부터 하고 있을 때",blank:"떡 줄 사람은 꿈도 안 꾸는데 ○○○부터 마신다",blankAns:"김칫국",blankDis:["미역국", "소고깃국", "콩나물국"],conflict:[35]},
+{id:77,proverb:"꼬리가 길면 밟힌다",meaning:"나쁜 짓을 오래 되풀이하면 결국에는 들키게 된다는 말.",example:"몇 달을 속였지만 결국 걸렸다. 꼬리가 길면 밟히는 법이다.",situation:"몰래 하던 짓을 계속 되풀이하다가 결국 들키고 말았을 때",blank:"○○가 길면 밟힌다",blankAns:"꼬리",blankDis:["발자국", "그림자", "소문"],conflict:[17]},
+{id:78,proverb:"말 한마디에 천 냥 빚도 갚는다",meaning:"말을 잘하면 어려운 일이나 불가능해 보이는 일도 풀어 갈 수 있다는 말.",example:"진심으로 사과하니 화가 풀리셨다. 말 한마디에 천 냥 빚도 갚는다.",situation:"정중한 사과 한마디로 크게 틀어졌던 사이가 풀렸을 때",blank:"말 한마디에 ○○ 빚도 갚는다",blankAns:"천 냥",blankDis:["백 냥", "만 냥", "열 냥"],conflict:[1]},
+{id:79,proverb:"미운 놈 떡 하나 더 준다",meaning:"미운 사람일수록 더 잘 대해 주어야 뒤탈이 없다는 말.",example:"마음에 안 들어도 먼저 챙겨 줘라. 미운 놈 떡 하나 더 주는 거다.",situation:"껄끄러운 사이일수록 오히려 더 챙겨 주어 뒤탈을 막으려 할 때",blank:"○○ 놈 떡 하나 더 준다",blankAns:"미운",blankDis:["착한", "배고픈", "어린"],conflict:[]},
+{id:80,proverb:"발 없는 말이 천 리 간다",meaning:"말은 순식간에 멀리까지 퍼지니 항상 조심해서 해야 한다는 말.",example:"하루 만에 학교 전체가 알더라. 발 없는 말이 천 리 간다.",situation:"점심시간에 한 이야기가 저녁에 벌써 옆 반까지 퍼져 있을 때",blank:"○ 없는 말이 천 리 간다",blankAns:"발",blankDis:["손", "날개", "뿌리"],conflict:[15]},
+{id:81,proverb:"방귀 뀐 놈이 성낸다",meaning:"잘못을 저지른 사람이 오히려 큰소리를 치며 화를 냄을 이르는 말.",example:"늦은 건 자기면서 왜 소리를 지르니. 방귀 뀐 놈이 성내는구나.",situation:"자기가 약속을 어겨 놓고 오히려 목소리를 높이며 화를 낼 때",blank:"○○ 뀐 놈이 성낸다",blankAns:"방귀",blankDis:["코", "하품", "트림"],conflict:[]},
+{id:82,proverb:"벼는 익을수록 고개를 숙인다",meaning:"교양이 있고 아는 것이 많은 사람일수록 더 겸손하게 행동한다는 말.",example:"그렇게 잘하시면서도 늘 배우려 하신다. 벼는 익을수록 고개를 숙인다.",situation:"아는 게 많은 사람일수록 오히려 말을 아끼고 자세를 낮출 때",blank:"○는 익을수록 고개를 숙인다",blankAns:"벼",blankDis:["콩", "보리", "수수"],conflict:[84]},
+{id:83,proverb:"병 주고 약 준다",meaning:"남을 해쳐 놓고는 뒤늦게 도와주는 척 나서는 얄미운 태도를 이르는 말.",example:"먼저 놀려 놓고 이제 와 위로한다니, 병 주고 약 주는 격이다.",situation:"먼저 못되게 굴어 놓고 뒤늦게 걱정해 주는 척 다가올 때",blank:"○ 주고 약 준다",blankAns:"병",blankDis:["독", "상처", "매"],conflict:[]},
+{id:84,proverb:"빈 수레가 요란하다",meaning:"속에 든 것이 없고 아는 것이 적은 사람이 오히려 더 떠들어 댐을 이르는 말.",example:"아는 것도 없이 목소리만 크다. 빈 수레가 요란하다.",situation:"아는 것도 없으면서 제일 크게 떠들고 나서는 사람을 볼 때",blank:"○ 수레가 요란하다",blankAns:"빈",blankDis:["큰", "낡은", "무거운"],conflict:[82]},
+{id:85,proverb:"사촌이 땅을 사면 배가 아프다",meaning:"남이 잘되는 것을 기뻐하지 못하고 공연히 시기함을 이르는 말.",example:"친구가 상을 받았는데 마음이 이상했다. 사촌이 땅을 사면 배가 아프다더니.",situation:"친하게 지내던 친구가 상을 받자 축하는커녕 속이 쓰릴 때",blank:"○○이 땅을 사면 배가 아프다",blankAns:"사촌",blankDis:["이웃", "형제", "친구"],conflict:[68]},
+{id:86,proverb:"소 잃고 외양간 고친다",meaning:"일이 이미 잘못된 뒤에야 뒤늦게 손을 쓰는 어리석음을 이르는 말.",example:"시험이 끝나고서야 계획표를 짜니 소 잃고 외양간 고치는 격이다.",situation:"자전거를 도둑맞고 나서야 자물쇠를 사러 갈 때",blank:"○ 잃고 외양간 고친다",blankAns:"소",blankDis:["말", "닭", "돼지"],conflict:[]},
+{id:87,proverb:"쇠뿔도 단김에 빼라",meaning:"마음먹은 일은 미루지 말고 그 자리에서 곧바로 해치워야 한다는 말.",example:"오늘 바로 시작하자. 쇠뿔도 단김에 빼랬다.",situation:"마음먹은 김에 미루지 않고 그 자리에서 바로 시작할 때",blank:"○○도 단김에 빼라",blankAns:"쇠뿔",blankDis:["사슴뿔", "못", "가시"],conflict:[]},
+{id:88,proverb:"수박 겉 핥기",meaning:"속 내용은 알지 못한 채 겉만 대충 훑고 넘어감을 이르는 말.",example:"하루 만에 다 봤다지만 수박 겉 핥기였다.",situation:"두꺼운 책을 하루 만에 넘겨 놓고 내용은 하나도 말하지 못할 때",blank:"○○ 겉 핥기",blankAns:"수박",blankDis:["참외", "호박", "감자"],conflict:[]},
+{id:89,proverb:"시작이 반이다",meaning:"무슨 일이든 시작하기가 어렵지, 일단 시작하면 절반은 한 셈이라는 말.",example:"첫 문장만 쓰면 나머지는 따라온다. 시작이 반이다.",situation:"미루기만 하던 일을 일단 첫 줄이라도 써 놓으니 마음이 놓일 때",blank:"○○이 반이다",blankAns:"시작",blankDis:["노력", "준비", "마무리"],conflict:[41]},
+{id:90,proverb:"아는 길도 물어 가랬다",meaning:"잘 아는 일이라도 세심하게 살피고 확인한 뒤에 해야 한다는 말.",example:"익숙한 문제일수록 조건을 다시 봐라. 아는 길도 물어 가랬다.",situation:"늘 다니던 길이지만 어른께 한 번 더 여쭤보고 나설 때",blank:"아는 길도 ○○ 가랬다",blankAns:"물어",blankDis:["돌아", "쉬어", "뛰어"],conflict:[18]},
+{id:91,proverb:"어물전 망신은 꼴뚜기가 시킨다",meaning:"못난 사람 하나가 그가 속한 집단 전체를 욕먹인다는 말.",example:"한 사람 때문에 우리 반 전체가 지적을 받았다. 어물전 망신은 꼴뚜기가 시킨다더니.",situation:"한 사람의 잘못된 행동 때문에 반 전체가 욕을 먹게 됐을 때",blank:"○○○ 망신은 꼴뚜기가 시킨다",blankAns:"어물전",blankDis:["푸줏간", "싸전", "방앗간"],conflict:[]},
+{id:92,proverb:"언 발에 오줌 누기",meaning:"잠깐 효과가 있을 뿐 곧 사정이 더 나빠지는 임시변통을 이르는 말.",example:"벼락치기로 한 번은 넘겼지만 언 발에 오줌 누기였다.",situation:"당장 급해서 빌린 돈으로 막았지만 다음 달이 더 막막해졌을 때",blank:"○ 발에 오줌 누기",blankAns:"언",blankDis:["빈", "다친", "젖은"],conflict:[23]},
+{id:93,proverb:"우물 안 개구리",meaning:"넓은 세상 형편을 모르고 자기가 아는 것만 옳다고 여기는 좁은 사람을 이르는 말.",example:"대회에 나가 보고서야 내가 우물 안 개구리였음을 알았다.",situation:"자기가 아는 방식만 옳다고 여기며 다른 의견은 들으려 하지 않을 때",blank:"○○ 안 개구리",blankAns:"우물",blankDis:["항아리", "마당", "웅덩이"],conflict:[67]},
+{id:94,proverb:"자다가 봉창 두드린다",meaning:"앞뒤 상황과 아무 상관 없는 엉뚱한 말이나 행동을 함을 이르는 말.",example:"급식 얘기를 하는데 갑자기 수학 문제라니, 자다가 봉창 두드리는 소리다.",situation:"한창 진지한 이야기를 하는데 전혀 상관없는 말을 불쑥 꺼낼 때",blank:"자다가 ○○ 두드린다",blankAns:"봉창",blankDis:["문짝", "창문", "마루"],conflict:[32]},
+{id:95,proverb:"종로에서 뺨 맞고 한강에서 눈 흘긴다",meaning:"화가 난 자리에서는 말 한마디 못 하고 엉뚱한 데 가서 분풀이함을 이르는 말.",example:"형한테 혼나고 동생한테 짜증이라니. 종로에서 뺨 맞고 한강에서 눈 흘기는구나.",situation:"선생님께 혼나고 와서는 아무 잘못 없는 동생에게 짜증을 낼 때",blank:"○○에서 뺨 맞고 한강에서 눈 흘긴다",blankAns:"종로",blankDis:["저잣거리", "남대문", "한양"],conflict:[]},
+{id:96,proverb:"쥐구멍에도 볕 들 날 있다",meaning:"몹시 어렵고 힘든 사람에게도 언젠가는 좋은 때가 온다는 말.",example:"힘들어도 조금만 더 버티자. 쥐구멍에도 볕 들 날 있다.",situation:"오래 힘들었던 사람에게 드디어 좋은 소식이 찾아왔을 때",blank:"○○○에도 볕 들 날 있다",blankAns:"쥐구멍",blankDis:["담벼락", "두엄더미", "그늘막"],conflict:[45, 66]},
+{id:97,proverb:"티끌 모아 태산",meaning:"아무리 작고 하찮은 것이라도 자꾸 모으면 나중에 큰 것이 된다는 말.",example:"매일 백 원씩 모은 저금통이 꽉 찼다. 티끌 모아 태산이다.",situation:"하루에 백 원씩 모은 저금통이 일 년 만에 제법 묵직해졌을 때",blank:"○○ 모아 태산",blankAns:"티끌",blankDis:["모래", "낙엽", "이슬"],conflict:[2]},
+{id:98,proverb:"하나를 보고 열을 안다",meaning:"한 가지 일을 보면 그 사람의 됨됨이 전체를 짐작할 수 있다는 말.",example:"신발 정리하는 걸 보니 알겠다. 하나를 보고 열을 안다.",situation:"인사하는 태도 하나만으로 그 사람 됨됨이를 짐작할 수 있을 때",blank:"하나를 보고 ○을 안다",blankAns:"열",blankDis:["백", "둘", "천"],conflict:[75]},
+{id:99,proverb:"하룻강아지 범 무서운 줄 모른다",meaning:"철없이 함부로 덤비거나 겁 없이 날뛰는 사람을 이르는 말.",example:"3학년 형들에게 겁 없이 대드네. 하룻강아지 범 무서운 줄 모른다.",situation:"이제 막 배우기 시작한 아이가 선배에게 겁 없이 대들 때",blank:"하룻강아지 ○ 무서운 줄 모른다",blankAns:"범",blankDis:["늑대", "매", "불"],conflict:[73]},
+{id:100,proverb:"열 손가락 깨물어 안 아픈 손가락 없다",meaning:"자식이 여럿이라도 부모에게는 하나같이 다 소중하다는 말.",example:"누가 더 예쁘냐고 여쭈니 웃기만 하셨다. 열 손가락 깨물어 안 아픈 손가락 없다고.",situation:"누가 더 예쁘냐고 여쭈니 어머니가 그저 웃기만 하실 때",blank:"열 손가락 깨물어 안 아픈 ○○○ 없다",blankAns:"손가락",blankDis:["발가락", "손톱", "손마디"],conflict:[62]}
+];
+const PASSAGES=[
+{id:1,genre:"학생 생활",prompt:"다음 글쓴이가 깨달은 바에 어울리는 속담을 쓰시오.",text:"짝과 사흘째 한마디도 섞지 않았다. 시작은 사소했다. 지우개를 빌려 달라기에 내가 툭 던지듯 대답했다. 바쁘니까 나중에 하라고. 표정도 좋지 않았을 것이다.\n\n그날 오후 체육복을 두고 와서 내가 빌려 달라고 했다. 짝은 못 들은 척했다. 두 번을 물었는데도 대꾸가 없었다. 나는 화가 났다. 겨우 그것 가지고 저러나 싶었다. 집에 오는 내내 짝이 옹졸하다고 여겼다.\n\n저녁을 먹다가 순서가 떠올랐다. 먼저 쌀쌀맞게 군 쪽은 나였다. 나는 아침에 내가 어떤 말투를 썼는지 까맣게 잊고 있었고, 짝은 그것을 그대로 돌려준 셈이었다.\n\n다음 날 아침 먼저 인사를 건넸다. 어제는 내가 좀 그랬지, 하고. 짝은 잠깐 머뭇거리더니 웃었다. 그러고는 지우개를 반으로 잘라 내 책상에 올려 두었다.\n\n되돌아온 것은 결국 내가 먼저 내보낸 것과 닮아 있었다.\n\n생각해 보면 집에서도 그랬다. 어머니께 퉁명스럽게 대답한 날은 저녁 밥상 분위기가 늘 무거웠다. 나는 그때마다 어머니가 예민하시다고 여겼다. 먼저 날을 세운 쪽이 나였다는 건 한 번도 헤아리지 않았다.\n\n그날 이후로 나는 무언가를 부탁하거나 대답할 때 목소리부터 살피게 됐다. 완벽하게 되지는 않는다. 급하면 또 툭 튀어나온다. 다만 튀어나온 뒤에 알아채는 속도는 조금 빨라졌다.",answer:"가는 말이 고와야 오는 말이 곱다",accept:["가는말이고와야오는말이곱다"]},
+{id:2,genre:"칼럼",prompt:"다음 글의 필자가 경고하는 바에 어울리는 속담을 쓰시오.",text:"통장 내역을 처음부터 끝까지 훑어본 적이 있는가. 나는 지난달에 처음 해 봤다. 결과는 부끄러웠다.\n\n한 달에 나가는 정기 결제가 아홉 개였다. 음악 서비스 팔천 원, 영상 서비스 만 천 원, 쓰지도 않는 저장 공간 삼천 원, 이름조차 기억나지 않는 것이 둘. 하나씩 보면 커피 한 잔 값이다. 그래서 결제할 때마다 아무렇지 않았다. 합쳐 보니 오만 원이 넘었고, 일 년이면 육십만 원이었다.\n\n큰돈은 나갈 때 티가 난다. 손이 떨리고 한 번 더 따져 본다. 무서운 것은 티가 나지 않는 쪽이다. 매달 조금씩 빠져나가는 돈은 아프지 않다. 아프지 않으니 세어 보지도 않는다.\n\n시간도 마찬가지다. 자기 전에 십 분씩만 들여다본 화면이 한 달이면 다섯 시간이다.\n\n무너지는 일은 대개 요란하게 오지 않는다. 아주 조금씩, 알아채지 못할 만큼 천천히 스며든다.\n\n몸도 다르지 않다. 하루에 한 시간씩 굽은 자세로 앉는다고 그날 저녁에 허리가 아프지는 않다. 이 년쯤 지나서야 병원에 간다. 그때 의사는 오래된 습관이라고 말한다. 어느 하루를 지목할 수 없기에 고치기도 어렵다.\n\n그래서 나는 요즘 한 달에 한 번 내역을 들여다본다. 대단한 절약을 하려는 것이 아니다. 새어 나가는 자리를 눈으로 한 번은 보자는 것이다. 보지 않으면 끝까지 모른다.",answer:"가랑비에 옷 젖는 줄 모른다",accept:["가랑비에옷젖는줄모른다"]},
+{id:3,genre:"이야기",prompt:"다음 글의 상황에 어울리는 속담을 쓰시오.",text:"어머니가 새벽에 갑자기 쓰러지셨다. 나는 열다섯이었고 무엇을 해야 할지 몰랐다. 큰아버지 댁은 차로 세 시간, 이모 댁은 그보다 멀었다. 전화를 걸었지만 두 분 다 지금 출발해도 아침이 지나야 도착한다고 하셨다.\n\n그때 문을 두드린 사람은 아래층 아주머니였다. 소리를 들으셨다고 했다. 아주머니는 곧바로 구급차를 부르고, 내 겉옷을 챙겨 주고, 병원까지 따라오셨다. 접수 서류를 대신 써 주신 것도 그분이었다. 응급실 복도에서 내 손을 잡고 계셨다.\n\n큰아버지는 점심때가 다 되어 도착하셨다. 미안하다고, 왜 더 일찍 연락하지 않았느냐고 하셨다. 나는 새벽 두 시에 걸었다고 말씀드리지 못했다.\n\n명절에 한 번 뵙는 분들을 나는 오래 든든한 뒷배라고 여겨 왔다. 실제로 그분들은 우리를 아끼신다. 다만 아끼는 마음과 지금 당장 달려올 수 있는 거리는 다른 문제였다.\n\n퇴원하던 날 어머니는 아주머니께 봉투를 내미셨다. 아주머니는 한사코 받지 않으셨다. 대신 김치 한 통을 들려 보내셨다.\n\n그 뒤로 우리 집은 아래층과 자주 오간다. 반찬을 나누고, 택배를 대신 받아 주고, 여행 갈 때 열쇠를 맡긴다. 급할 때 문을 두드릴 수 있는 거리에 누가 사는지, 그것이 얼마나 든든한 일인지 그날 알았다.",answer:"가까운 남이 먼 친척보다 낫다",accept:["가까운남이먼친척보다낫다"]},
+{id:4,genre:"학생 생활",prompt:"다음 상황을 나타내기에 알맞은 속담을 쓰시오.",text:"석 달 만에 마음먹고 도서관에 갔다. 시험이 코앞이라 더는 미룰 수 없었다. 가방에 문제집 세 권을 넣고 버스를 두 번 갈아탔다. 사십 분이 걸렸다.\n\n정문에 도착하니 안내문이 붙어 있었다. 소방 시설 점검으로 하루 휴관. 어제까지는 없던 종이였다. 유리문 너머로 불 꺼진 열람실이 보였다.\n\n돌아서서 근처 독서실을 찾았다. 만석이었다. 카페에 가니 시험 기간이라 그런지 자리가 하나도 없었다. 결국 집으로 돌아왔는데, 하필 그날 오후에 아파트 단수 공사가 있었다. 물도 안 나오고 공사 소음까지 들렸다.\n\n책상에 앉아 문제집을 펴 놓고 한참을 멍하니 있었다. 하필 오늘, 하필 내가 마음먹은 오늘이었다. 몇 달을 미룰 때는 아무 일도 없더니.\n\n저녁에 친구에게 이 이야기를 했더니 배를 잡고 웃었다. 자기도 지난달에 비슷한 일을 겪었다고 했다. 큰맘 먹고 미용실에 갔는데 하필 정기 휴무였다고.\n\n마음먹었을 때만 이런 일이 생기는 것 같다. 실은 그렇지 않을 것이다. 미루던 동안에도 도서관은 가끔 문을 닫았을 테고, 나는 그것을 몰랐을 뿐이다. 다만 애써 나선 하루에 겪으니 유독 크게 느껴진다. 공교롭다는 말은 이럴 때 쓰는 모양이다.\n\n다음 주에 다시 가 볼 참이다. 이번에는 출발 전에 홈페이지부터 확인하려 한다.",answer:"가는 날이 장날이다",accept:["가는날이장날이다"]},
+{id:5,genre:"학생 생활",prompt:"다음 글쓴이의 처지에 어울리는 속담을 쓰시오.",text:"수요일에 국어 수행평가가 끝났다. 발표 자료를 만드느라 사흘을 매달렸고, 끝나고 나니 다리에 힘이 풀렸다. 이제 좀 쉬겠구나 싶었다.\n\n목요일 아침 조회 시간에 담임 선생님께서 안내장을 나눠 주셨다. 다음 주에 영어 말하기 평가가 있다고 했다. 원고를 외워 와야 한다고. 종이를 받아 드는데 뒤에서 누가 한숨을 쉬었다.\n\n점심시간에는 과학 선생님이 오셔서 실험 보고서 마감이 금요일이라고 하셨다. 나는 아직 실험 결과를 정리도 못 했다. 오후에는 체육 선생님께서 다음 주 실기 평가 종목을 발표하셨다. 오래달리기였다.\n\n집에 와서 달력에 하나씩 적었다. 다음 주 열흘 동안 평가가 다섯 개였다. 하나를 넘으면 두 개가 기다리고, 그것을 넘으면 또 세 개가 있었다.\n\n책상에 엎드려 있다가 일단 영어 원고부터 펼쳤다.\n\n작년 이맘때는 이 정도는 아니었다. 학년이 오를수록 넘어야 할 것이 하나씩 늘어난다. 겨우 한 고비를 지났다 싶으면 그다음 것이 더 높은 자리에서 기다린다. 지난 고비가 차라리 쉬웠다는 생각이 들 때쯤 또 새로운 것이 온다.\n\n친구에게 이야기했더니 자기도 똑같다고 했다. 우리는 잠깐 웃었다. 웃고 나서 각자 자기 책상으로 돌아갔다.\n\n일단 이번 주만 넘겨 보기로 했다. 그다음은 그때 가서 볼 참이다.",answer:"갈수록 태산이다",accept:["갈수록태산이다"]},
+{id:6,genre:"신문 기사",prompt:"다음 기사에 나타난 소비자들의 태도에 어울리는 속담을 쓰시오.",text:"가격과 성능이 비슷할 때 소비자가 무엇을 기준으로 고르는지 살펴본 조사 결과가 나왔다. ○○연구원이 성인 천이백 명을 대상으로 조사한 바에 따르면, 응답자의 육십사 퍼센트가 마지막 결정 요인으로 디자인과 색상을 꼽았다.\n\n조사는 두 제품의 사양과 금액을 똑같이 제시한 뒤 하나를 고르게 하는 방식으로 이뤄졌다. 기능 설명을 아무리 길게 붙여도, 조건이 다르지 않다고 판단한 순간부터 응답자들은 눈에 드는 쪽으로 기울었다.\n\n업계도 이런 흐름을 따라가고 있다. 한 가전 업체는 지난해부터 같은 제품을 여덟 가지 색으로 내놓고 있다. 이 회사 관계자는 성능 경쟁이 평준화되면서 마지막 한 뼘을 결정하는 것은 보기 좋은 쪽이라고 설명했다.\n\n연구를 맡은 ○○ 박사는 이를 낭비로 보기 어렵다고 했다. 치를 돈이 다르지 않다면 더 마음에 드는 쪽을 택하는 편이 오히려 합리적이라는 것이다.\n\n조사에서는 흥미로운 대목도 나왔다. 두 제품의 금액 차이가 오 퍼센트 이내일 때는 응답자 대부분이 보기 좋은 쪽을 골랐지만, 차이가 십오 퍼센트를 넘어서면 기능을 따지는 비율이 급격히 올라갔다.\n\n○○ 박사는 조건이 대등하다는 판단이 서는 순간부터 사람들은 마음이 끌리는 쪽으로 움직인다며, 이는 충동이라기보다 오래된 셈법에 가깝다고 덧붙였다.",answer:"같은 값이면 다홍치마",accept:["같은값이면다홍치마"]},
+{id:7,genre:"이야기",prompt:"다음 글의 형에게 해 줄 수 있는 속담을 쓰시오.",text:"형은 요즘 부쩍 잔소리가 늘었다. 내가 수학 문제를 붙들고 있으면 뒤에서 한마디씩 한다. 그것도 아직 못 푸느냐고. 자기는 그 단원을 이틀 만에 끝냈다고 한다.\n\n나는 형 책상 서랍을 안다. 이 년 전 형의 오답 노트가 거기 있다. 같은 단원 문제에 빨간 표시가 스무 개 넘게 그어져 있고, 여백에는 모르겠다는 글씨가 크게 적혀 있다. 그때 형은 밤마다 어머니께 학원을 바꿔 달라고 졸랐다.\n\n어제도 형이 한숨을 쉬며 지나갔다. 저건 기본인데, 하면서. 나는 서랍 이야기를 꺼내려다 말았다. 꺼냈으면 아마 싸웠을 것이다.\n\n사람은 자기가 건너온 자리를 참 쉽게 잊는 모양이다. 지금 서 있는 높이에서만 아래를 내려다본다.\n\n며칠 전에는 형이 자전거를 가르쳐 주겠다며 나섰다. 균형만 잡으면 되는데 왜 못 타느냐고 했다. 어머니가 옆에서 웃으셨다. 너는 초등학교 사 학년까지 보조 바퀴를 달고 다녔다고.\n\n형은 잠깐 멈칫하더니 아무 말도 하지 않았다. 그날은 잔소리가 없었다. 저녁에는 슬그머니 내 방에 들어와 문제집을 뒤적이다 나갔다.\n\n사람은 자기가 건너온 자리를 참 쉽게 잊는 모양이다. 지금 서 있는 높이에서만 아래를 내려다본다. 나도 언젠가 동생에게 그럴까 봐, 요즘은 틀린 문제를 지우지 않고 그대로 남겨 둔다.",answer:"개구리 올챙이 적 생각 못 한다",accept:["개구리올챙이적생각못한다"]},
+{id:8,genre:"신문 기사",prompt:"다음 기사의 인물에게 어울리는 속담을 쓰시오.",text:"국제 수학 올림피아드에서 금메달을 딴 ○○○ 군의 사연이 알려지며 화제가 되고 있다. ○○ 군은 학원에 다닌 적이 한 번도 없다.\n\n전남의 작은 면 소재지에서 자란 ○○ 군은 전교생이 마흔 명인 중학교를 나왔다. 집안 형편은 넉넉하지 않았다. 참고서를 살 돈이 없어 학교 도서관에 있는 오래된 문제집을 되풀이해 풀었다고 한다. 답지가 없는 책이 많아 스스로 검산하는 습관이 그때 생겼다.\n\n담당 교사는 처음 이 학생을 봤을 때 풀이 과정이 교과서와 전혀 달라 놀랐다고 말했다. 배운 적이 없으니 자기 방식대로 길을 냈다는 것이다.\n\n○○ 군의 어머니는 아들이 초등학생 때부터 하나를 붙들면 며칠씩 놓지 않았다고 전했다. 저녁을 먹다가도 종이에 무언가를 그리곤 했다는 것이다. 형편이 어려워 사교육은 엄두를 내지 못했다고 했다.\n\n대회 뒤 여러 학교에서 진학 제안이 왔지만 ○○ 군은 지역 고등학교에 남기로 했다. 익숙한 자리에서 계속하고 싶다는 이유였다.\n\n그는 어디서 배웠느냐보다 얼마나 오래 붙들고 있었느냐가 더 중요했던 것 같다고 말했다. 교육계에서는 이번 사례가 여건보다 몰입의 힘을 보여 준다는 평가가 나온다. 다만 한 교육학자는 이런 사례가 드물기 때문에 화제가 되는 것이라며, 개인의 의지에만 기대는 시선은 경계해야 한다고 지적했다.",answer:"개천에서 용 난다",accept:["개천에서용난다"]},
+{id:9,genre:"학생 생활",prompt:"다음 상황에서 뒷줄 학생들을 두고 할 수 있는 속담을 쓰시오.",text:"청소 구역이 바뀌어 우리 모둠이 급식실을 맡게 됐다. 여섯 명이었다. 그런데 실제로 빗자루를 든 사람은 셋뿐이었다.\n\n나머지 셋은 창가에 서서 이야기를 나눴다. 한 명은 휴대전화를 봤다. 한 번은 걸레를 건네주며 같이 하자고 했더니, 자기는 오늘 무릎이 아프다고 했다. 그러고는 웃으며 잘한다고, 계속하라고 했다. 응원하는 말투였다.\n\n식판 정리를 마치고 바닥까지 다 닦았을 때쯤 종이 울렸다. 그제야 셋이 다가와 가방을 들었다. 수고했다는 말도 했다. 자기 일이 아니라는 듯한 얼굴이었다.\n\n다음 주에도 같은 구역이다. 선생님께 말씀드릴지 고민 중이다.\n\n그런데 곰곰이 돌아보니 나도 지난달에 비슷했다. 옆 모둠이 게시판 꾸미기를 하느라 쩔쩔맬 때 나는 자리에 앉아 구경만 했다. 도와줄까 하는 마음이 잠깐 들었지만 내 일이 아니라고 넘겼다.\n\n그때 그 모둠 아이들도 지금의 나 같은 기분이었을 것이다.\n\n한 교실에 있고 한 모둠 이름으로 묶여 있는데도, 어떤 사람에게는 그 일이 저 멀리서 일어나는 남의 사정으로 보이는 모양이다. 그 거리를 좁히는 건 결국 손을 먼저 내미는 쪽인 듯하다. 다음 주에는 내가 먼저 빗자루를 건네 볼 참이다. 건네받고도 서 있으면, 그때는 선생님께 말씀드리려 한다.",answer:"강 건너 불구경 한다",accept:["강건너불구경한다"]},
+{id:10,genre:"이야기",prompt:"다음 글의 어머니가 하시려는 말씀에 어울리는 속담을 쓰시오.",text:"언니는 삼 년째 같은 대회를 준비했다. 첫해에는 예선에서 떨어졌고, 이듬해에는 본선에서 미끄러졌다. 올해가 마지막이었다.\n\n준비하는 모습을 옆에서 봤다. 새벽 여섯 시에 일어나 두 시간을 연습하고 학교에 갔다. 돌아와서 또 세 시간을 했다. 손끝이 갈라져 반창고를 감고도 계속했다. 힘들지 않으냐고 물으면 언니는 그냥 웃었다.\n\n대회 사흘 전에 언니가 처음으로 불안하다고 했다. 이번에도 안 되면 어떡하느냐고. 어머니는 별말씀 없이 물 한 잔을 내미셨다.\n\n그리고 한참 뒤에 이렇게 말씀하셨다. 삼 년을 하루도 안 거르고 쌓아 올린 것이 그렇게 쉽게 흔들리겠느냐고. 흔들릴 만한 것이었으면 진작에 무너졌을 거라고.\n\n언니는 그날 밤 오래 자지 못했지만, 다음 날 아침에는 평소처럼 여섯 시에 일어났다. 손끝에 반창고를 새로 감고 연습실로 갔다.\n\n대회 결과는 아직 모른다. 이 글을 쓰는 지금은 발표 하루 전이다.\n\n다만 나는 어머니 말씀이 무슨 뜻인지 알 것 같다. 결과가 어떻든 언니가 삼 년 동안 쌓은 것은 그대로 남는다는 뜻이었다. 하루아침에 올린 것이 아니니 하루아침에 사라질 리도 없다는 것.\n\n나도 요즘 아침마다 삼십 분씩 무언가를 하고 있다. 아직 삼 주째다.",answer:"공든 탑이 무너지랴",accept:["공든탑이무너지랴"]},
+{id:11,genre:"칼럼",prompt:"다음 글의 필자가 비판하는 상황에 어울리는 속담을 쓰시오.",text:"학교 규정집을 펼쳐 보면 '단정한 복장'이라는 표현이 나온다. 이 네 글자를 두고 해마다 실랑이가 벌어진다. 어떤 해에는 무릎 위 치마가 문제였고, 어떤 해에는 아무 말이 없었다. 규정은 그대로였다.\n\n문제는 문장이 아니라 잣대다. 잣대가 정해져 있지 않으면, 판단하는 사람이 누구냐에 따라 결론이 달라진다. 같은 학생이 어제는 지적을 받고 오늘은 넘어간다. 학생들은 규정을 지키는 법이 아니라 누가 지도 교사인지를 먼저 살피게 된다.\n\n회사에서도, 계약서에서도 이런 표현은 흔하다. '상당한 기간', '합리적인 범위' 같은 말들이다. 넣을 때는 넉넉하게 품자는 뜻이었을 것이다. 그러나 다툼이 생기면 저마다 자기 쪽으로 끌어당긴다. 결국 힘이 센 쪽의 해석이 남는다.\n\n규정을 촘촘하게 쓰는 일은 번거롭다. 그래도 그 번거로움을 미루면, 지키는 사람이 아니라 해석하는 사람이 주인이 된다.\n\n느슨한 문장은 누구에게나 열려 있는 것처럼 보이지만, 실제로는 아무도 기댈 수 없다.\n\n몇 해 전 한 학교에서 이런 일이 있었다. 체육복 등교를 허용한다는 안내가 나갔는데, 어떤 교사는 하교까지 입어도 된다고 읽었고 어떤 교사는 등교할 때만이라고 읽었다. 같은 문장이었다. 학생들은 그 사이에서 하루에 두 번 옷을 갈아입었다.\n\n기준을 세우는 일은 자유를 줄이는 일처럼 보인다. 그러나 기준이 없으면 그 자리를 목소리 큰 쪽이 차지한다. 명확한 문장은 지키는 사람을 위한 것이 아니라, 지키는 사람을 지켜 주기 위한 것이다.",answer:"귀에 걸면 귀걸이 코에 걸면 코걸이",accept:["귀에걸면귀걸이코에걸면코걸이"]},
+{id:12,genre:"학생 생활",prompt:"다음 글쓴이의 처지에 어울리는 속담을 쓰시오.",text:"악기점 진열창 앞에서 이십 분을 서 있었다. 가운데 놓인 기타 때문이었다. 나뭇결이 곱고 지판이 짙었다. 가격표가 안쪽으로 돌려져 있어서 한참을 기웃거리다 겨우 봤다. 백사십만 원.\n\n한 달 용돈이 삼만 원이다. 다 모아도 사 년이 걸린다. 그사이 저 기타는 팔릴 것이다.\n\n주인아저씨가 들어와서 쳐 보라고 하셨다. 나는 손을 저었다. 사지도 못할 걸 만져 보면 더 갖고 싶어질 것 같았다. 아저씨는 웃으시며 그래도 소리는 들어 보라고 하시더니 몇 마디를 튕겨 주셨다. 소리가 맑았다.\n\n집에 와서 형이 쓰던 낡은 기타를 꺼냈다. 줄이 하나 늘어져 있었다. 그것으로 한 시간을 연습했다. 손끝은 아팠지만 나쁘지 않았다.\n\n며칠 뒤에도 그 앞을 지났다. 기타는 아직 있었다. 나는 이번에는 오래 서 있지 않았다.\n\n가질 수 없는 것을 오래 들여다본다고 내 것이 되지는 않는다. 아무리 마음에 들어도 유리 한 장 너머에 있으면 그것은 남의 물건이다. 손에 쥘 수 없는 것을 두고 마음만 쓰면 하루가 아깝다.\n\n다만 언젠가 저 소리를 낼 수 있는 손을 만들어 두는 일은 지금도 할 수 있다. 늘어진 줄은 어제 갈았다. 오늘은 코드 세 개를 익혔다. 사 년 뒤에 저 기타가 남아 있을지는 모르겠지만, 그때 내 손은 지금보다 나아져 있을 것이다.",answer:"그림의 떡",accept:["그림의떡"]},
+{id:13,genre:"칼럼",prompt:"다음 글의 필자가 하려는 말에 어울리는 속담을 쓰시오.",text:"자료를 모으는 일에는 누구나 열심이다. 강의를 저장해 두고, 좋은 글을 스크랩하고, 참고 도서를 사 둔다. 폴더가 늘어날수록 무언가 하고 있다는 기분이 든다. 그러나 대개 거기서 멈춘다.\n\n어떤 학생은 시험 준비를 한다며 정리 노트 서식만 석 달을 다듬었다. 색깔별로 나누고 항목을 세분하는 데는 공을 들였지만, 정작 그 안에 채워 넣은 내용은 몇 장 되지 않았다.\n\n쌓아 둔 것은 그 자체로 아무 일도 하지 않는다. 읽어서 제 말로 바꾸고, 앞뒤를 이어 쓸모 있는 모양으로 엮어야 비로소 힘을 낸다. 모으는 즐거움은 크고 엮는 수고는 지루하다. 그래서 많은 사람이 재료만 잔뜩 쥔 채로 끝난다.\n\n책장을 떠올려 보면 알기 쉽다. 사 놓고 펴지 않은 책이 열 권이면, 그 열 권은 아직 내 것이 아니다. 값을 치렀을 뿐이다. 한 권이라도 끝까지 읽고 밑줄 그은 문장을 옮겨 적어 두면, 그때부터 그것은 쓸 수 있는 재료가 된다.\n\n배운 것도 마찬가지다. 수업에서 들은 내용과 책에서 읽은 내용과 어제 겪은 일이 따로 놓여 있으면 아무 힘이 없다. 셋을 한 줄로 이어 놓는 순간 비로소 생각이 된다.\n\n필요한 것은 더 모으는 일이 아니라, 이미 가진 것을 이어 붙이는 일인지도 모른다. 그 수고를 건너뛰면 아무리 좋은 재료도 재료로만 남는다.",answer:"구슬이 서 말이라도 꿰어야 보배다",accept:["구슬이서말이라도꿰어야보배다"]},
+{id:14,genre:"이야기",prompt:"다음 글의 아버지가 지키려 한 바에 어울리는 속담을 쓰시오.",text:"아버지는 십일월에 나와 약속을 하셨다. 기말고사가 끝나면 함께 자전거를 타고 강변을 돌자고. 나는 별 기대를 하지 않았다. 그런 약속은 늘 흐지부지됐으니까.\n\n시험이 끝난 주에 아버지 회사가 바빠졌다. 주말에도 나가시는 날이 이어졌다. 나는 잊었다. 사실 잊은 척했다.\n\n십이월 마지막 주 토요일 아침, 아버지가 방문을 두드리셨다. 밖은 영하였다. 나가자고 하셨다. 나는 이 추위에 무슨 자전거냐고 했다. 아버지는 그래도 하기로 한 것은 해야 한다고 하셨다.\n\n우리는 두 시간을 달렸다. 손이 시려 장갑을 두 겹 꼈다. 강변에는 사람이 거의 없었다. 중간에 편의점에서 어묵을 하나씩 먹었다.\n\n돌아오는 길에 아버지가 말씀하셨다. 지키기 어려운 약속은 애초에 하지 않는 게 낫고, 이미 했으면 어떻게든 해내는 게 낫다고. 그래야 다음에 한 약속도 무게가 생긴다고.\n\n나는 그 뒤로 아버지가 하신 말씀을 잘 흘려듣지 않는다. 지키실 것만 말씀하신다는 걸 알기 때문이다.\n\n생각해 보면 아버지는 늘 그러셨다. 사 준다고 하신 것은 늦어도 사 주셨고, 안 된다고 하신 것은 아무리 졸라도 끝내 안 된다고 하셨다. 어릴 때는 그게 답답했다. 지금은 그 답답함이 믿음의 다른 이름이었다는 걸 안다.\n\n나도 요즘은 친구에게 무언가를 약속하기 전에 한 번 더 생각한다. 해 줄 수 있는지 먼저 따져 보고 말한다. 가볍게 뱉은 한마디가 사람 사이의 저울을 기울인다는 걸 이제는 조금 알겠다.",answer:"남아일언중천금",accept:["남아일언중천금"]},
+{id:15,genre:"학생 생활",prompt:"다음 상황이 주는 교훈에 어울리는 속담을 쓰시오.",text:"점심시간에 교실에 넷만 남아 있었다. 창문도 문도 닫혀 있었고 복도에는 아무도 없었다. 우리는 같은 반 아이 하나를 두고 한참 흉을 봤다. 목소리를 낮추지도 않았다. 아무도 없으니까.\n\n사흘 뒤, 그 아이가 나를 복도에서 불러 세웠다. 표정이 굳어 있었다. 그날 우리가 무슨 얘기를 했는지 거의 그대로 알고 있었다. 누가 어떤 표현을 썼는지까지 알고 있었다.\n\n나중에 알고 보니 청소 당번 한 명이 뒷문 쪽 사물함을 정리하고 있었다. 우리는 그 애가 있는 줄도 몰랐다. 그 애가 일부러 옮긴 것도 아니었다. 지나가는 말로 한마디 했을 뿐인데 그것이 옮겨지고 옮겨져 당사자에게 닿았다.\n\n사과를 했지만 관계는 예전 같지 않다. 그 아이는 웃으며 받아 주었는데, 나는 그 웃음이 더 마음에 걸린다.\n\n지금도 나는 아무도 없어 보이는 교실에서 누군가 얘기를 꺼내면 화제를 돌린다.\n\n어머니께 이 일을 말씀드렸더니 웃으시며 옛날에도 그랬다고 하셨다. 마을에서 뒤에서 한 얘기는 사흘이면 당사자 귀에 들어갔다고. 지금은 사흘도 안 걸린다. 대화방 하나면 몇 분이면 된다.\n\n숨어서 한 얘기라도 결국 어딘가로 새어 나간다. 벽에도 귀가 있고 창밖에도 귀가 달려 있다고 여기는 편이 안전하다. 무엇보다, 당사자 앞에서도 할 수 있는 얘기만 꺼내는 사람이 되고 싶어졌다. 그게 훨씬 마음이 편하기도 하다.",answer:"낮말은 새가 듣고 밤말은 쥐가 듣는다",accept:["낮말은새가듣고밤말은쥐가듣는다"]},
+{id:16,genre:"이야기",prompt:"다음 상황을 나타내기에 알맞은 속담을 쓰시오.",text:"동아리 발표를 두 달 준비했다. 열 명이 매주 두 번씩 모였다. 대본을 여섯 번 고쳤고, 소품은 직접 만들었다. 마지막 연습에서 처음으로 실수 없이 끝까지 갔을 때 다들 손뼉을 쳤다.\n\n발표 전날 밤, 부장이 단체 대화방에 글을 올렸다. 사실 자기는 이 대본이 처음부터 마음에 들지 않았다고. 다른 팀 것이 더 나아 보인다고. 술술 이어진 그 긴 글에는 각자의 연기에 대한 평가까지 적혀 있었다.\n\n대화방이 조용해졌다. 새벽까지 아무도 답을 달지 않았다.\n\n다음 날 무대에 올랐지만 분위기는 이미 달라져 있었다. 서로 눈을 마주치지 않았다. 대사가 두 번 엉켰고 끝나고도 아무도 남지 않았다. 두 달을 함께 웃으며 만든 것이 하루 만에 흩어졌다.\n\n부장은 나중에 솔직하게 말한 것뿐이라고 했다. 솔직함이 문제는 아니었을 것이다. 문제는 그 말을 꺼낸 시점이었다.\n\n두 달 전이었다면 대본을 고칠 수 있었다. 한 달 전이었어도 배역을 바꿀 수 있었다. 하필 마지막 밤이었다. 고칠 수 있는 것은 아무것도 없고, 무너뜨릴 수 있는 것만 남은 시각이었다.\n\n그 뒤로 동아리는 반쯤 흩어졌다. 다음 학기에 세 명이 나갔다. 두 달 동안 쌓아 올린 것이 한 시간 만에 사라지는 걸 나는 그때 처음 봤다. 어떤 말은 내용보다 던지는 때가 전부일 수도 있다는 생각이 든다.",answer:"다 된 밥에 재 뿌리기",accept:["다된밥에재뿌리기"]},
+{id:17,genre:"학생 생활",prompt:"다음 글의 친구에게 어울리는 속담을 쓰시오.",text:"교실에서 이어폰이 없어졌다. 선생님께서 조회 시간에 말씀하셨다. 잃어버린 사람이 있으니 혹시 본 사람은 알려 달라고. 그뿐이었다. 누구를 지목하지도, 가방을 열어 보라고 하지도 않으셨다.\n\n그런데 한 아이가 벌떡 일어났다. 자기는 절대 아니라고 했다. 어제 여섯 시에 집에 갔고, 사물함 근처에도 가지 않았고, 그런 걸 가져갈 이유가 없다고. 묻지도 않은 알리바이를 삼 분 동안 늘어놓았다.\n\n교실이 조용해졌다. 아무도 그 아이를 의심하지 않았는데, 그 순간부터 모두의 눈이 그쪽으로 갔다.\n\n다음 날 이어폰은 급식실 반납대에서 나왔다. 주인이 두고 온 것이었다. 그 아이는 아무 잘못이 없었다.\n\n다만 나는 그날 배운 것이 있다. 마음에 걸리는 구석이 있으면 아무도 건드리지 않은 자리에서도 스스로 먼저 움찔한다는 것이다.\n\n나중에 그 아이가 조용히 털어놓기를, 지난 학기에 다른 반에서 비슷한 일로 오해를 받은 적이 있다고 했다. 그때 아무 말도 못 하고 넘어간 게 억울해서 이번에는 먼저 말하기로 했다는 것이다. 그 마음은 이해가 갔다.\n\n그래도 결과는 반대였다. 묻지 않았는데 나서서 아니라고 하는 순간, 사람들의 시선은 그쪽으로 몰린다. 떳떳한 사람은 대개 조용하다.",answer:"도둑이 제 발 저린다",accept:["도둑이제발저린다"]},
+{id:18,genre:"신문 기사",prompt:"다음 기사가 강조하는 태도에 어울리는 속담을 쓰시오.",text:"삼십 년 무사고를 기록한 ○○ 항공정비반의 작업 방식이 업계에서 주목받고 있다. 이 정비반의 원칙은 단순하다. 이상 없음이 확인된 부품도 반드시 두 번 이상 직접 확인한다는 것이다.\n\n정비사들은 점검표에 표시가 되어 있어도 그것을 근거로 넘어가지 않는다. 앞사람이 확인했다는 기록이 있어도 자기 손으로 다시 만져 본다. 하루에 같은 나사를 세 번 조이는 일도 있다. 비효율적으로 보이지만, 이 정비반은 삼십 년 동안 단 한 건의 결함도 놓치지 않았다.\n\n반장은 가장 위험한 순간이 이 부품은 늘 괜찮았다는 마음이 들 때라고 말했다. 익숙한 것일수록 눈이 대충 지나가기 때문이다.\n\n지난해 국내에서 발생한 정비 관련 사고 열일곱 건 가운데 열두 건이 점검 생략에서 비롯된 것으로 나타났다. 대부분 여러 차례 문제가 없었던 부품이었다.\n\n번거로움을 견디는 손이 결국 사람을 지킨다는 것이 이 정비반의 결론이다.\n\n이 정비반에는 표어가 하나 붙어 있다. 확실한 것은 없다, 확인한 것만 있다. 신입 정비사들은 처음에 이 방식을 답답해한다고 한다. 한 정비사는 입사 초기에 왜 멀쩡한 것을 자꾸 만지느냐고 물었다가, 반장에게서 멀쩡해 보이는 것이 가장 위험하다는 답을 들었다고 전했다.\n\n항공 당국은 이 정비반의 절차를 표준 지침에 반영하는 방안을 검토하고 있다. 다만 현장에서는 인력과 시간이 뒷받침되지 않으면 형식만 남을 수 있다는 우려도 나온다.",answer:"돌다리도 두드려 보고 건넌다",accept:["돌다리도두드려보고건넌다"]},
+{id:19,genre:"칼럼",prompt:"다음 글에서 필자가 하려는 말을 가장 잘 담은 속담을 쓰시오.",text:"지구 반대편에서 벌어진 일이 몇 시간 만에 손안으로 들어온다. 어느 나라 지도자가 무슨 말을 했는지, 어떤 도시에 비가 얼마나 내렸는지 우리는 안다. 그러면서 정작 같은 층에 사는 이웃의 이름은 모른다. 며칠째 우편함에 고지서가 쌓여 있어도 눈에 들어오지 않는다.\n\n얼마 전 한 노인이 홀로 세상을 떠난 지 여러 날 만에 발견됐다는 소식을 들었다. 같은 복도를 쓰던 사람들은 하나같이 몰랐다고 했다. 무정한 이들이어서가 아니다. 그저 가장 가까운 자리가 시야에서 빠져 있었을 뿐이다.\n\n먼 데 있는 것은 애써 찾아보고, 곁에 있는 것은 늘 거기 있으니 나중에 봐도 된다고 미룬다. 그러다 사라진 뒤에야 몰랐다는 말을 한다. 세상 돌아가는 사정에 밝은 사람이 정작 제 식구 사정에는 깜깜한 경우를 우리는 흔히 본다.\n\n회사도 다르지 않다. 지구 반대편 지사의 실적은 표로 외우면서, 바로 옆자리 동료가 몇 달째 힘들어했다는 사실은 그가 그만두고 나서야 전해 듣는다. 집도 그렇다. 뉴스에 나온 사건은 몇 시에 무슨 일이 있었는지 훤히 읊으면서, 어머니가 언제부터 무릎이 아프셨는지는 대답하지 못한다.\n\n먼 데 있는 것은 애써 찾아본다. 곁에 있는 것은 늘 거기 있으니 나중에 봐도 된다고 미룬다. 그러다 사라진 뒤에야 몰랐다는 말을 한다. 세상 돌아가는 사정에 밝은 이가 정작 제 식구 사정에는 깜깜한 경우를 우리는 흔히 본다.\n\n오늘 저녁에는 손에 든 것을 잠시 내려놓을 일이다. 정작 살펴야 할 자리는 늘 코앞에 있다.",answer:"등잔 밑이 어둡다",accept:["등잔밑이어둡다"]},
+{id:20,genre:"이야기",prompt:"다음 글의 상황에 어울리는 속담을 쓰시오.",text:"그날 아침은 평소와 똑같았다. 아버지는 여섯 시 반에 나가셨고, 어머니는 국을 데우셨고, 나는 늦어서 빵을 들고 뛰었다. 아무 조짐도 없었다.\n\n이 교시가 끝났을 때 교무실에서 나를 불렀다. 담임 선생님 표정이 이상했다. 아버지가 출근길에 사고를 당하셨다고 했다. 병원으로 가야 한다고. 나는 무슨 말인지 알아듣지 못해서 두 번 되물었다.\n\n택시 안에서 창밖을 봤다. 사람들이 평소처럼 걷고 있었다. 신호등이 바뀌고, 가게가 문을 열고 있었다. 세상은 아무 일도 없다는 듯 굴러가는데 우리 집만 한가운데가 무너져 있었다.\n\n다행히 아버지는 두 달 만에 퇴원하셨다. 지금은 지팡이를 짚고 다니신다.\n\n퇴원하시던 날 아버지가 그러셨다. 사고 직전까지 아무 생각도 없으셨다고. 신호를 기다리며 점심에 뭘 먹을지 떠올리고 계셨다고 했다.\n\n그 뒤로 나는 아침에 인사를 거르지 않는다. 다녀오시라는 말을 꼭 한다. 유난스럽다고 생각한 적도 있었는데, 이제는 그 한마디가 하루의 매듭 같다.\n\n무슨 일이든 예고를 하고 오지 않는다는 것을 그날 알았다. 구름 한 점 없는 날에 무언가가 떨어지듯 그렇게 온다. 준비할 수 있는 것도 아니다. 다만 오늘 할 수 있는 인사를 미루지 않는 정도가 우리가 할 수 있는 전부인 듯하다.",answer:"마른하늘에 날벼락",accept:["마른하늘에날벼락"]},
+{id:21,genre:"칼럼",prompt:"다음 글의 상황에 어울리는 속담을 쓰시오.",text:"새벽 다섯 시 인력 사무소 앞에 사람들이 서 있다. 대부분 오십 대에서 육십 대다. 그날 일이 있을지 없을지는 여섯 시가 되어 봐야 안다. 하루 일당을 받지 못하고 돌아서는 사람도 있다.\n\n한 분께 왜 이 일을 하시느냐고 여쭈었다. 그분은 웃으며 되물으셨다. 안 하면 어쩌겠느냐고. 몸이 성치 않아 오래 서 있으면 허리가 아프지만, 그렇다고 쉬면 다음 달 방세를 못 낸다고 하셨다.\n\n체면이나 자존심 같은 말은 배부른 자리에서 나온다는 이야기도 하셨다. 젊을 때는 못 하겠다고 뛰쳐나온 일이 여럿이었는데, 지금은 무엇이든 시켜만 달라고 한다고. 부끄럽지 않으냐고 스스로 물어본 적도 있지만, 그 물음보다 밥 한 끼가 급했다고 하셨다.\n\n사람을 움직이는 것은 대개 거창한 신념이 아니다. 당장 오늘 저녁에 무엇을 먹을 것인가 하는 문제다.\n\n그 앞에서는 하고 싶은 일과 하기 싫은 일의 경계도 쉽게 흐려진다.\n\n우리는 흔히 어떤 선택을 두고 왜 그렇게까지 하느냐고 묻는다. 자존심도 없느냐고. 그러나 그 물음은 대개 오늘 저녁이 해결된 사람의 입에서 나온다. 끼니가 걸린 자리에서는 그런 물음이 사치가 된다.\n\n그날 여섯 시에 그분은 차에 오르셨다. 일이 있는 날이었다. 돌아서며 웃으셨는데, 그 웃음이 오래 남았다.\n\n사람을 함부로 판단하기 전에 그 사람의 저녁상을 한 번 떠올려 볼 일이다. 못 할 짓이라는 말도, 배가 부를 때에나 꺼낼 수 있는 말이다.",answer:"목구멍이 포도청이다",accept:["목구멍이포도청이다"]},
+{id:22,genre:"이야기",prompt:"다음 글쓴이의 심정에 어울리는 속담을 쓰시오.",text:"그 애와는 초등학교 사 학년 때부터 붙어 다녔다. 서로 집 비밀번호를 알 정도였다. 나는 그 애에게 말 못 할 것이 없었다.\n\n이 학기에 반장 선거가 있었다. 나는 나가 볼까 망설이다가 그 애에게만 먼저 얘기했다. 준비한 공약도 보여 줬다. 그 애는 좋다고, 꼭 나가라고 했다.\n\n선거 이틀 전, 후보 명단에 그 애 이름이 있었다. 내 공약과 거의 같은 내용이 그 애 유인물에 적혀 있었다. 급식 건의함, 자리 바꾸기 방식까지 그대로였다.\n\n나는 아무 말도 못 했다. 따지면 내가 옹졸해 보일 것 같았다. 그 애는 아무렇지 않게 웃으며 다가와 서로 잘해 보자고 했다.\n\n결과는 그 애가 됐다. 나는 축하한다고 말했고, 그 뒤로 우리는 예전처럼 지내지 못한다.\n\n모르는 사람에게 당했으면 이렇게까지 아프지 않았을 것이다. 낯선 이의 무례는 그냥 지나가면 그만이다.\n\n오래 곁에 두고 등을 맡겨도 된다고 여겼던 쪽에서 날아온 것이라 오래 남는다. 나는 요즘 누구에게 무엇을 얼마나 말해야 하는지 자꾸 계산하게 됐다. 그게 제일 싫다.\n\n어머니는 사람을 아예 의심하며 살라는 뜻은 아니라고 하셨다. 다만 가장 가까운 것일수록 방심하기 쉬우니, 마음을 주는 일과 눈을 뜨는 일은 따로 두라고 하셨다.\n\n그 애를 미워하지는 않는다. 다시 예전처럼 지낼 수 없을 뿐이다.",answer:"믿는 도끼에 발등 찍힌다",accept:["믿는도끼에발등찍힌다"]},
+{id:27,genre:"칼럼",prompt:"다음 글의 필자가 강조하는 바에 어울리는 속담을 쓰시오.",text:"어릴 때 손톱을 물어뜯던 아이가 있었다. 부모는 크면 저절로 고쳐지겠거니 했다. 그 아이는 지금 마흔이 넘었고, 회의 중에 여전히 손을 입으로 가져다 댄다. 본인도 안다. 고치려고 여러 번 마음먹었지만 긴장하는 순간이면 손이 먼저 움직인다고 했다.\n\n습관은 머리가 아니라 몸에 새겨진다. 그래서 결심만으로는 잘 지워지지 않는다. 어릴수록 새겨지는 속도는 빠르고, 자랄수록 지우는 속도는 느려진다.\n\n인사하는 태도, 약속 시간을 지키는 몸가짐, 밥 먹는 자세 같은 것들이 그렇다. 사소해 보여서 어릴 때는 굳이 다잡지 않는다. 그러나 그 사소한 것들이 평생 그 사람을 따라다닌다.\n\n아이에게 무엇을 가르칠지 고민된다면, 지식보다 몸에 배게 할 것을 먼저 정하는 편이 낫다. 처음 들일 때가 가장 쉽다.\n\n한 연구진이 성인 수백 명을 추적한 적이 있다. 어린 시절 식사 시간이 일정했던 사람과 그렇지 않았던 사람을 삼십 년 뒤에 다시 만났더니, 생활 전반의 규칙성에서 뚜렷한 차이가 남아 있었다. 본인들은 대부분 그 이유를 알지 못했다.\n\n무섭다면 그 점이 무섭다. 몸에 새겨진 것은 스스로 선택했다는 감각조차 남기지 않는다. 그냥 원래 그런 사람인 줄로 안다.\n\n어른이 되어 고치는 일이 불가능하지는 않다. 다만 몇 배의 품이 든다.",answer:"세 살 버릇 여든까지 간다",accept:["세살버릇여든까지간다"]},
+{id:30,genre:"이야기",prompt:"다음 글의 선생님께 어울리는 속담을 쓰시오.",text:"우리 학교 도서관에는 아이들이 잘 오지 않았다. 이 층 구석에 있는 데다 문이 무겁고, 안은 늘 어두웠다. 대출 기록이 한 학기에 스무 권도 되지 않았다.\n\n새로 오신 사서 선생님은 첫해에 조명을 바꿔 달라고 하셨다. 예산이 없다는 답이 돌아왔다. 이듬해에는 서가를 창가 쪽으로 옮기고 싶다고 하셨다. 안전 문제로 어렵다고 했다. 그다음에는 점심시간에 문을 열어 두겠다고 하셨는데, 관리할 사람이 없다는 이유로 막혔다.\n\n보통 여기서 그만둔다. 선생님은 그러지 않으셨다. 대신 매달 다른 방법을 하나씩 들고 오셨다. 낡은 스탠드를 얻어다 놓기도 하고, 방과 후에 혼자 서가를 정리하기도 하셨다. 아이들이 좋아할 만한 책을 사비로 몇 권 사 오신 적도 있다.\n\n사 년째 되던 해에 도서관이 바뀌었다. 조명이 새로 들어왔고 창가에 낮은 서가가 놓였다. 교장 선생님께서 결재하시며 이제는 안 해 줄 도리가 없더라고 하셨다는 이야기를 들었다.\n\n작년 대출 기록은 이천 권을 넘겼다. 한 번에 된 일은 하나도 없었다. 스무 번쯤 두드린 끝에 열린 문이었다.\n\n한 번 청해서 안 되면 대개 안 되는 일이라고 여긴다. 나도 그랬다. 안 된다는 대답은 그 시점의 대답일 뿐이라는 것을 선생님을 보며 알았다. 사정이 바뀌고 사람이 바뀌고, 무엇보다 계속 청하는 이가 있으면 언젠가 상황이 움직인다.\n\n선생님은 올해 또 무언가를 청하고 계신다. 이번에는 도서관을 방과 후에도 열자는 이야기다. 아직 답은 못 받으셨다고 한다.",answer:"열 번 찍어 안 넘어가는 나무 없다",accept:["열번찍어안넘어가는나무없다"]},
+{id:33,genre:"이야기",prompt:"다음 글쓴이가 느낀 바에 어울리는 속담을 쓰시오.",text:"같은 반에 삼 년을 붙어 다닌 친구가 있다. 나는 그 애를 다 안다고 여겼다. 좋아하는 과목, 싫어하는 반찬, 화가 났을 때 짓는 표정까지.\n\n지난달 그 애가 전학을 간다고 했다. 나는 그날 처음 들었다. 반 아이들도 그날 알았다. 그런데 담임 선생님은 두 달 전부터 알고 계셨다고 했다.\n\n왜 말하지 않았느냐고 물었다. 그 애는 웃으며 말할 기회를 못 찾았다고 했다. 나는 그 웃음 뒤에 무엇이 있는지 읽지 못했다. 삼 년을 옆자리에 앉았는데도.\n\n나중에 다른 친구를 통해 들었다. 부모님이 오래 다투셨고 결국 갈라서게 되어 어머니를 따라 가는 것이라고. 그 애는 그 이야기를 아무에게도 하지 않았다. 매일 웃으며 급식실에 같이 갔고, 시험 끝나고 떡볶이도 먹으러 갔다. 나는 아무것도 몰랐다.\n\n바다 깊이는 재면 나온다. 배 안에 무엇이 있는지도 열어 보면 안다. 그런데 마주 앉은 사람이 무엇을 안고 있는지는 삼 년을 봐도 알 수가 없었다.\n\n전학 가던 날 그 애는 평소처럼 웃으며 손을 흔들었다. 나는 잘 지내라는 말밖에 하지 못했다.\n\n그 뒤로 나는 사람을 함부로 다 안다고 말하지 않는다. 삼 년을 옆자리에 앉아도 모르는 것이 있는데, 며칠 본 사람을 두고 어떤 사람이라고 단정하는 일이 우스워졌다.\n\n어머니께 이 얘기를 했더니, 아무렇지 않아 보이는 얼굴이 가장 오래 참은 얼굴일 수도 있다고 하셨다.\n\n전화번호는 남겨 두고 갔다. 아직 걸어 보지 못했다. 다음 주에는 한번 걸어 볼 참이다. 이번에는 괜찮으냐고 먼저 물어보려 한다.",answer:"열 길 물속은 알아도 한 길 사람 속은 모른다",accept:["열길물속은알아도한길사람속은모른다"]},
+{id:37,genre:"신문 기사",prompt:"다음 기사의 상황에 어울리는 속담을 쓰시오.",text:"세계 랭킹 일 위 ○○○ 선수가 국제 대회 사 회전에서 무명의 선수에게 패했다. 십일 년 만의 조기 탈락이다.\n\n경기는 예상 밖으로 흘렀다. ○○○ 선수는 첫 세트를 무난히 따냈으나 두 번째 세트부터 범실이 늘었다. 특히 그가 지난 오 년 동안 성공률 구십 퍼센트를 유지해 온 백핸드에서 실수가 여섯 차례 나왔다. 해설진도 여러 번 놀라움을 표했다.\n\n경기 뒤 인터뷰에서 ○○○ 선수는 담담했다. 컨디션 탓을 하지 않았고 심판 판정에 대해서도 언급하지 않았다. 다만 오늘은 자기 몸이 자기 뜻대로 움직이지 않았다고만 말했다.\n\n전문가들은 이번 결과를 이변으로만 볼 필요는 없다고 했다. ○○대 스포츠과학과 한 교수는 최고 수준의 선수도 연간 경기의 오 퍼센트가량은 설명하기 어려운 부진을 겪는다며, 문제는 그 하루를 어떻게 넘기느냐라고 말했다.\n\n상대 선수는 이번 대회 이전까지 메이저 대회 본선 경험이 두 차례뿐이었다. 그는 경기 뒤 손이 떨려 라켓을 놓칠 뻔했다며, 상대가 흔들리는 것을 보고 오히려 자기가 더 긴장했다고 말했다.\n\n기록을 보면 ○○○ 선수는 지난 십일 년 동안 사 회전 이전에 진 적이 없다. 통산 승률은 팔십칠 퍼센트다. 그런 선수도 열 경기에 한 번은 진다는 뜻이기도 하다.\n\n○○○ 선수는 다음 대회 출전을 예정대로 준비하겠다고 밝혔다. 그는 이런 날도 있어야 다음 경기가 무섭지 않다고 덧붙였다. 완벽한 사람은 없다는 말을 이제야 알겠다는 말도 남겼다.",answer:"원숭이도 나무에서 떨어진다",accept:["원숭이도나무에서떨어진다"]},
+{id:39,genre:"이야기",prompt:"다음 글쓴이의 상태를 나타내기에 알맞은 속담을 쓰시오.",text:"초등학교 삼 학년 여름이었다. 계곡에서 발이 미끄러져 물속으로 빠졌다. 깊지 않은 곳이었고 삼촌이 곧바로 건져 올렸으니 큰일은 아니었다. 그런데 그 뒤로 무언가 달라졌다.\n\n수영장에 가면 발목까지만 담그고 더는 들어가지 못했다. 친구들이 손을 잡아 줘도 다리가 굳었다. 중학생이 되어서는 욕조에 몸을 담그는 데도 한참이 걸렸다. 물이 찰랑거리는 소리만 들려도 그해 여름의 감각이 목까지 올라왔다.\n\n어른들은 별일 아니었다고 했다. 나도 안다. 머리로는 안다. 그런데 몸이 먼저 기억한다. 파란 타일만 봐도, 물비린내만 맡아도 심장이 앞서 반응한다.\n\n강사 선생님은 처음에 이해하지 못하셨다. 이만한 깊이가 뭐가 무섭냐고. 나도 설명하기 어려웠다. 무서운 것은 깊이가 아니라 물이 몸에 닿는 그 느낌 자체다.\n\n여름마다 친구들은 계곡으로 바다로 간다. 나는 매년 다른 약속을 만든다. 몇 번은 따라갔지만 늘 그늘에 앉아 가방을 지켰다. 재미없어 보인다는 말을 들을 때마다 웃고 넘겼다.\n\n이 년쯤 전부터 강습을 받고 있다. 이제 겨우 허리까지 들어간다. 그날 일과 아무 상관 없는 것들까지 겁이 난다는 게 스스로도 답답하다. 한 번 크게 겁을 먹은 마음은 좀처럼 제자리로 돌아오지 않는다.",answer:"자라 보고 놀란 가슴 솥뚜껑 보고 놀란다",accept:["자라보고놀란가슴솥뚜껑보고놀란다"]},
+{id:45,genre:"신문 기사",prompt:"다음 기사의 상황에 어울리는 속담을 쓰시오.",text:"지난 십오일 ○○ 광산에서 갱도가 무너져 고립됐던 작업자 두 명이 사고 발생 이백이십 시간 만에 모두 구조됐다.\n\n두 사람은 갱도 안쪽 좁은 공간에 갇혀 있었다. 통신은 끊겼고 조명도 없었다. 구조 당국은 사고 초기에 생존 가능성을 낮게 봤다. 지하수가 차오르고 있었고 추가 붕괴 위험도 컸다.\n\n구조된 작업자들은 안쪽에 남아 있던 비닐과 커피믹스로 아흐레를 버텼다고 전했다. 두 사람은 물이 떨어지는 자리를 찾아 비닐로 받아 마셨고, 체온을 지키려 서로 등을 맞대고 앉았다. 한 사람이 잠들면 다른 사람이 깨어 있기로 정했다고 한다.\n\n구조대는 열흘째 되던 날 시추공을 통해 미세한 소리를 감지했다. 갱도 도면에 남아 있지 않던 오래된 통로가 발견되면서 접근로가 열렸다.\n\n병원으로 옮겨진 한 작업자는 사흘째까지는 끝이라고 여겼다고 말했다. 그러다 물 떨어지는 소리를 듣고 마음을 고쳐먹었다고 했다. 물이 들어온다면 어딘가 바깥과 이어진 틈이 있다는 뜻 아니겠느냐는 것이다.\n\n그때부터 두 사람은 매일 정해진 시각에 쇠붙이로 벽을 두드렸다. 구조대가 감지한 소리가 바로 그것이었다.\n\n의료진은 두 사람의 건강 상태가 예상보다 양호하다고 밝혔다. 체온을 유지하고 물을 확보한 것이 결정적이었다는 설명이다.\n\n구조 책임자는 마지막까지 방법을 찾은 것은 결국 안에 있던 두 사람이었다며, 아무리 막힌 자리에도 빠져나갈 틈은 남아 있더라고 말했다.",answer:"하늘이 무너져도 솟아날 구멍이 있다",accept:["하늘이무너져도솟아날구멍이있다"]},
+{id:60,genre:"학생 생활",prompt:"다음 상황을 한마디로 나타내기에 알맞은 속담을 쓰시오.",text:"학급 축제 준비 첫 회의 날이었다. 스물여섯 명이 둘러앉았고 반장이 무엇을 할지 물었다. 곧바로 열 가지 의견이 쏟아졌다. 연극을 하자, 아니다 부스를 차리자, 먹거리가 최고다, 짧은 영상을 찍자….\n\n누구도 물러서지 않았다. 연극을 밀던 쪽은 대본까지 써 왔다고 했고, 먹거리를 밀던 쪽은 재료비를 계산해 왔다고 했다. 서로 자기가 더 많이 준비했다며 목소리를 높였다. 사십 분이 지나도록 정해진 것은 하나도 없었다.\n\n결국 표결로 넘어갔는데 표가 여섯 갈래로 흩어져 가장 많은 것이 다섯 표였다. 다시 논의하자는 말이 나왔고 곧 종이 울렸다. 이튿날도, 그다음 날도 회의는 같은 자리를 맴돌았다.\n\n축제가 일주일 앞으로 다가온 날, 우리 반이 정한 것은 여전히 아무것도 없었다. 옆 반은 벌써 무대 연습을 하고 있었다.\n\n담임 선생님께서 왜 아직 못 정했느냐고 물으셨다. 아무도 대답하지 못했다. 돌아보면 나쁜 의견은 하나도 없었다. 연극도 재미있었을 것이고 먹거리도 잘됐을 것이다.\n\n문제는 스물여섯 명이 저마다 다른 그림을 그리고 있었다는 데 있었다. 방향을 하나로 모으는 사람은 없고 목소리만 스물여섯 갈래였다. 힘은 힘대로 들어갔는데 남은 것은 없었다.\n\n결국 우리 반은 축제 당일 교실을 자습실로 내주었다.",answer:"사공이 많으면 배가 산으로 간다",accept:["사공이많으면배가산으로간다"]},
+{id:65,genre:"신문 기사",prompt:"다음 기사의 상황에 어울리는 속담을 쓰시오.",text:"○○국과 △△국의 무역 분쟁이 넉 달째 이어지면서 애먼 제삼국 기업들이 피해를 보고 있다. 양국은 서로 상대국 제품에 높은 관세를 매기며 맞서고 있는데, 두 나라 모두에 부품을 대 온 중소 업체들이 잇따라 주문 취소를 통보받고 있다.\n\n국내 부품 업체 ○○사는 지난달 전체 물량의 사십 퍼센트가 끊겼다고 밝혔다. 이 회사 대표는 어느 편도 든 적이 없는데 왜 자기들이 문을 닫아야 하느냐고 말했다. 업계는 분쟁이 길어질 경우 협력 업체 삼백여 곳이 어려움을 겪을 것으로 내다봤다.\n\n정작 분쟁 당사국의 큰 기업들은 생산 거점을 옮기고 판로를 바꾸며 손실을 줄이고 있는 것으로 알려졌다. 자금과 조직을 갖춘 쪽은 어떻게든 길을 찾는다.\n\n문제는 그 아래 딸린 업체들이다. ○○사처럼 직원 스무 명 남짓한 회사는 거래처를 새로 뚫을 여력도, 몇 달을 버틸 자금도 없다. 실제로 지난 분기에만 관련 업체 열한 곳이 문을 닫았다.\n\n정부는 긴급 경영 자금을 지원하겠다고 밝혔으나 현장에서는 실효성이 떨어진다는 목소리가 나온다. 한 업체 관계자는 위에서 벌어지는 일에 왜 아래가 부서져야 하느냐고 되물었다.\n\n양국 협상은 다음 달 재개될 예정이다. 그러나 타결되더라도 이미 끊긴 거래가 되돌아오기까지는 상당한 시간이 걸릴 것으로 보인다. 업계는 협상 결과와 무관하게 피해가 남을 것이라고 우려한다.",answer:"고래 싸움에 새우 등 터진다",accept:["고래싸움에새우등터진다"]},
+{id:76,genre:"학생 생활",prompt:"다음 글쓴이에게 해 줄 수 있는 속담을 쓰시오.",text:"교내 백일장 결과가 다음 주에 나온다고 했다. 나는 심사가 끝나기도 전에 계획부터 세웠다. 상금이 오만 원이라기에 그 돈으로 무엇을 살지 정해 두었다. 사고 싶던 만년필이 삼만 팔천 원이었다.\n\n쉬는 시간에 친구들에게 말했다. 상을 받으면 아이스크림을 돌리겠다고. 말하다 보니 정말 받을 것 같았다. 집에 가서도 어머니께 넌지시 흘렸다. 어머니는 그러냐고만 하셨다.\n\n발표 전날에는 수상 소감까지 머릿속으로 짜 봤다. 너무 티 내지 말고 담담하게 말해야지, 그런 생각을 하다 잠들었다.\n\n결과가 붙었다. 내 이름은 없었다. 장려상 명단까지 두 번 훑었는데 없었다.\n\n교실로 돌아오는데 친구가 물었다. 아이스크림 언제 사 주느냐고. 웃으며 넘겼지만 얼굴이 뜨거웠다. 저녁에 어머니는 아무것도 묻지 않으셨다. 그게 더 민망했다.\n\n생각해 보면 아무도 나에게 무엇을 준다고 한 적이 없었다. 심사도 끝나지 않았고 명단도 나오지 않았는데 나 혼자 다 정해 놓고 있었다. 값을 계산해 둔 쪽지가 며칠 뒤 필통에서 나왔다.\n\n어머니께서 며칠 뒤에야 한마디 하셨다. 기대하는 건 나쁘지 않은데, 순서가 바뀌면 남는 게 부끄러움뿐이라고. 그 말이 오래 남았다.\n\n다음 백일장에도 나갈 생각이다. 이번에는 결과가 나온 뒤에 계획을 세우려 한다. 받고 나서 기뻐해도 늦지 않다는 걸 이제는 안다.",answer:"떡 줄 사람은 꿈도 안 꾸는데 김칫국부터 마신다",accept:["떡줄사람은꿈도안꾸는데김칫국부터마신다", "김칫국부터마신다"]},
+{id:82,genre:"이야기",prompt:"다음 글의 할아버지에게 어울리는 속담을 쓰시오.",text:"할아버지 서재에는 상패가 하나도 없었다. 사십 년 동안 흙을 만지며 도자기를 구운 분인데, 나는 그 사실을 전시회에 따라갔다가 우연히 알았다. 처음 보는 분들이 할아버지를 알아보고 다가와 인사를 건넸다. 그제야 나는 할아버지가 그 분야에서 꽤 이름 있는 분이라는 걸 알았다.\n\n집에 와서 여쭈었다. 왜 한 번도 말씀 안 하셨느냐고. 할아버지는 웃으며 찻잔을 내려놓으셨다.\n\n처음 가마를 열던 스무 살 무렵에는 그릇 하나만 잘 나와도 온 동네에 자랑하고 다녔다고 하셨다. 그런데 십 년, 이십 년이 지날수록 자랑할 말이 줄더라고. 알면 알수록 모르는 것이 더 크게 보였다고 하셨다.\n\n며칠 뒤 나는 할아버지 작업실에서 낡은 상자 하나를 발견했다. 그 안에 상장과 도록이 차곡차곡 담겨 있었다. 먼지가 앉아 있었다. 어머니 말씀으로는 삼십 년 동안 한 번도 꺼내신 적이 없다고 했다.\n\n같은 전시회에서 다른 분을 본 기억도 난다. 그분은 작품보다 자기 이력을 먼저 이야기했다. 어디서 상을 받았고 누구와 함께 공부했는지. 정작 그분 앞에 놓인 그릇을 한참 들여다본 사람은 없었다.\n\n할아버지는 아직도 매일 아침 가마 앞에 앉으신다. 그리고 여전히 당신을 그릇 만드는 사람이라고만 소개하신다.",answer:"벼는 익을수록 고개를 숙인다",accept:["벼는익을수록고개를숙인다"]},
+{id:86,genre:"신문 기사",prompt:"다음 기사의 상황에 어울리는 속담을 쓰시오.",text:"○○시가 지난달 붕괴 사고가 발생한 △△교 인근 노후 교량 열두 곳에 대해 긴급 점검에 나섰다. 시는 정밀 안전 진단 예산 사십억 원을 추가로 편성하고, 등급이 낮게 나온 교량은 통행을 제한하기로 했다고 밝혔다.\n\n그러나 주민들의 반응은 싸늘하다. 이번에 무너진 교량은 이미 삼 년 전 안전 등급 D 판정을 받은 곳이었다. 주민들은 그동안 여러 차례 보수를 요구했으나 시는 예산 부족을 이유로 미뤄 왔다. 지난해에만 관련 민원이 스물세 건 접수됐다.\n\n사고 이후 시가 내놓은 대책은 주민들이 그때 요구했던 내용과 크게 다르지 않다. 한 주민은 큰 사고가 나야만 움직이느냐며 목소리를 높였다.\n\n시 관계자는 늦었지만 이제라도 철저히 관리하겠다는 입장을 내놓았다.\n\n전문가들의 지적도 이어졌다. ○○대 토목공학과 한 교수는 노후 시설 관리 예산이 해마다 가장 먼저 깎이는 항목이라며, 사고가 나기 전에는 아무도 그 예산을 지키려 하지 않는다고 말했다. 실제로 △△교 보수 예산은 최근 삼 년 연속 편성에서 제외됐다.\n\n비슷한 일은 처음이 아니다. 이 년 전 □□시에서도 축대가 무너진 뒤에야 일대 옹벽 전수 조사가 이뤄졌다. 당시에도 사전 점검 요구는 여러 차례 있었다.\n\n이번 사고로 주민 네 명이 다쳤고, 인근 도로는 두 달째 통제되고 있다.",answer:"소 잃고 외양간 고친다",accept:["소잃고외양간고친다"]},
+{id:88,genre:"칼럼",prompt:"다음 글의 필자가 지적하는 태도에 어울리는 속담을 쓰시오.",text:"요약본이 넘쳐 난다. 두 시간짜리 강의를 십 분으로 줄인 영상, 삼백 쪽 책을 한 장으로 정리한 그림, 논문을 세 줄로 압축한 글. 시간이 없는 사람에게는 고마운 물건이다.\n\n문제는 그것으로 끝내는 데 있다. 요약을 본 사람은 그 주제를 안다고 느낀다. 실제로 대화에서 그럴듯하게 말할 수도 있다. 그러나 한 걸음만 더 들어가면 금세 막힌다. 왜 그런지, 반대 의견은 무엇인지, 예외는 어디에 있는지 묻는 순간 대답이 나오지 않는다.\n\n지식은 결론이 아니라 과정에 들어 있다. 저자가 왜 그 순서로 배열했는지, 어느 대목에서 망설였는지, 어떤 반론을 미리 막아 두었는지를 따라가야 비로소 제 것이 된다. 요약은 그 과정을 걷어 내고 결론만 남긴 것이다.\n\n학생들에게도 같은 이야기를 한다. 문제집 해설을 읽고 이해했다고 느끼는 순간을 조심하라고. 읽어서 아는 것과 스스로 풀어내는 것은 전혀 다르다.\n\n나 역시 한동안 그랬다. 읽은 책 목록은 길어지는데 남는 것은 없었다. 어느 날 누가 한 권을 두고 어떤 대목이 좋았느냐고 물었는데 대답을 못 했다. 분명히 끝까지 넘긴 책이었다.\n\n그 뒤로 읽는 방식을 바꿨다. 한 달에 다섯 권을 훑는 대신 한 권을 두 번 읽는다. 두 번째 읽을 때 비로소 보이는 문장이 있다.\n\n빨리 많이 아는 것처럼 보이는 길은 늘 열려 있다. 그 길로 가면 목록은 늘어나고 실속은 줄어든다.\n\n겉만 훑고 지나가면 맛은 보지 못한다. 단맛은 늘 껍질 안쪽에 있다.",answer:"수박 겉 핥기",accept:["수박겉핥기"]},
+{id:91,genre:"학생 생활",prompt:"다음 상황을 나타내기에 알맞은 속담을 쓰시오.",text:"체험학습을 다녀온 다음 날, 우리 반 이름이 전체 조회에서 불렸다. 박물관 쪽에서 학교로 연락이 왔다고 했다. 전시된 유물 앞 유리를 손으로 두드리고, 관람 중에 큰 소리로 떠들었다는 내용이었다.\n\n그런 학생은 세 명이었다. 나머지 스물세 명은 안내에 따라 조용히 다녔고, 오히려 다른 반보다 뒷정리도 잘했다. 인솔해 주신 선생님도 그렇게 말씀하셨다. 그러나 연락한 쪽에서는 우리가 그저 그 학교 그 반 학생들이었다.\n\n그날 이후 우리는 다른 반 아이들에게 몇 번이나 놀림을 받았다. 다음 달 견학은 신청이 반려됐다. 억울하다고 말해 봐야 소용없었다.\n\n처음에는 그 세 명을 원망했다. 조회가 끝나고 교실에서 언성이 오갔다. 그런데 며칠 지나니 원망보다 답답함이 남았다. 우리가 아무리 잘 다녀도, 밖에서는 잘한 스물세 명이 아니라 떠든 세 명으로 기억된다는 사실이 그랬다.\n\n선생님께서는 그래서 함께 다니는 자리가 어려운 것이라고 하셨다. 잘한 일은 각자의 몫으로 흩어지고, 잘못한 일은 전체의 이름으로 묶인다고.\n\n밖에서 보기에 우리는 스물여섯 명이 아니라 그냥 하나였다. 셋이 한 일이 스물여섯의 이름이 되어 돌아왔다.\n\n반장이 제안해서 다음 견학 전에 우리끼리 약속을 정하기로 했다. 대단한 규칙은 아니다. 밖에 나가면 우리는 각자가 아니라 우리 반이라는 것, 그것 하나만 기억하자는 정도다.",answer:"어물전 망신은 꼴뚜기가 시킨다",accept:["어물전망신은꼴뚜기가시킨다"]}
+];
+
+const SHEET_URL    = 'https://script.google.com/macros/s/AKfycbzGwhzJRzv_UPvDYV8_XXhYl5SQLIel-QPpFY08R365kObVplHYZVv4Mfy93KSizmRn/exec';
+const STORAGE_KEY  = 'rbd_proverb_v1';
+const LABELS       = ['①','②','③','④'];
+
+// ── 등급 ──
+function getTitle(pct) {
+  if (pct >= 95) return {emoji:'🏆', title:'류봉두의 수제자',  sub:'완벽해요! 선생님도 놀랐을걸요?',    color:'gold',   bar:'#F5A623'};
+  if (pct >= 80) return {emoji:'⭐', title:'류봉두의 오른팔',  sub:'거의 다 왔어요! 한 끗 차이!',      color:'silver', bar:'#8EAABB'};
+  if (pct >= 60) return {emoji:'🎓', title:'류봉두의 우등생',  sub:'꽤 하는데요? 조금만 더!',           color:'bronze', bar:'#C08553'};
+  if (pct >= 40) return {emoji:'🌱', title:'류봉두의 새싹',    sub:'절반은 넘었어요. 분발해요!',        color:'green',  bar:'#43A047'};
+  return               {emoji:'🌰', title:'류봉두의 떡잎',    sub:'가능성은 있어요. 복습이 필요해요!', color:'sprout', bar:'#7CB342'};
+}
+
+// ── STATE ──
+let player = {sid:'', name:''};
+let currentMode = 'basic', selectedCount = 100, selectedAdvCount = 20;
+let questions = [], currentIdx = 0, score = 0, correctCount = 0, wrongItems = [], answered = false;
+let advQuestions = [], advIdx = 0, advScore = 0, advCorrect = 0, advWrong = [], advAnswered = false;
+
+// ── 로컬 스코어 ──
+function getScores() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } }
+function saveScore(name, sc, correct, total) {
+  const arr = getScores();
+  arr.push({name, score:sc, correct, total, pct:Math.round(correct/total*100), date:new Date().toLocaleDateString('ko-KR')});
+  arr.sort((a,b) => b.score - a.score);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr.slice(0,50)));
+}
+
+// ── 로그인 ──
+async function doLogin() {
+  const sid  = document.getElementById('inp-sid').value.trim();
+  const name = document.getElementById('inp-name').value.trim();
+  const btn  = document.getElementById('login-btn');
+  const err  = document.getElementById('login-err');
+  if (!sid || !name) { showErr('학번과 이름을 모두 입력해 주세요.'); return; }
+  btn.disabled = true; btn.textContent = '확인 중...'; err.style.display = 'none';
+  try {
+    const res  = await fetch(SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain'},
+                   body: JSON.stringify({action:'login', sid, name})});
+    const data = await res.json();
+    if (data.status === 'ok') {
+      player = {sid: data.sid, name: data.name};
+      document.getElementById('topbar-user').textContent = player.name + '님';
+      document.getElementById('topbar-user').style.display = 'block';
+      if (data.best) {
+        const b = data.best;
+        document.getElementById('prev-record-body').textContent = `${b.title}  ·  ${b.pct}%  ·  ${b.score}점`;
+        document.getElementById('prev-record-sub').textContent  = `${b.date}  ·  누적 ${b.tries}회 응시`;
+        document.getElementById('prev-record').style.display    = 'block';
+      }
+      renderScoreboard('score-list-start');
+      if (getScores().length > 0) document.getElementById('scoreboard-card').style.display = 'block';
+      showScreen('screen-start');
+    } else if (data.status === 'denied') {
+      showErr(data.message || '등록되지 않은 학번이거나 이름이 다릅니다.');
+    } else {
+      showErr('서버 오류가 발생했습니다.');
+    }
+  } catch(e) { showErr('네트워크 오류. 인터넷 연결을 확인해 주세요.'); }
+  btn.disabled = false; btn.textContent = '로그인';
+}
+function showErr(msg) { const e = document.getElementById('login-err'); e.textContent = msg; e.style.display = 'block'; }
+
+// ── 모드·문제수 선택 ──
+function selectMode(m) {
+  currentMode = m;
+  document.getElementById('tab-basic').classList.toggle('active', m === 'basic');
+  document.getElementById('tab-adv').classList.toggle('active', m === 'adv');
+  document.getElementById('basic-options').style.display = m === 'basic' ? '' : 'none';
+  document.getElementById('adv-options').style.display   = m === 'adv'   ? '' : 'none';
+}
+function selectCount(el, n) {
+  document.querySelectorAll('[data-count]').forEach(b => b.classList.remove('active'));
+  el.classList.add('active'); selectedCount = n;
+}
+function selectAdvCount(el, n) {
+  document.querySelectorAll('.adv-count').forEach(b => b.classList.remove('active'));
+  el.classList.add('active'); selectedAdvCount = n;
+}
+
+// ── 퀴즈 시작 ──
+function startQuiz() {
+  if (currentMode === 'basic') startBasic();
+  else startAdv();
+}
+
+/* ─── 기본 모드 ─── */
+function shuffle(arr) { return [...arr].sort(() => Math.random() - .5); }
+
+function buildQ(p, type) {
+  const TYPES = ['meaning','proverb','situation','blank'];
+  if (!type) type = TYPES[Math.floor(Math.random() * 4)];
+  let typeTag, qText, hint, correctText, options;
+
+  if (type === 'meaning') {
+    typeTag = '📖 뜻 찾기'; qText = `"${p.proverb}"의 뜻은?`; hint = '';
+    correctText = p.meaning;
+    options = shuffle([p.meaning, ...getWrong(p, 'meaning')]);
+  } else if (type === 'proverb') {
+    typeTag = '🔤 속담 찾기'; qText = '다음 뜻에 해당하는 속담은?'; hint = p.meaning;
+    correctText = p.proverb;
+    options = shuffle([p.proverb, ...getWrongProverb(p)]);
+  } else if (type === 'situation') {
+    typeTag = '💬 상황 적용'; qText = '다음 상황에 어울리는 속담은?'; hint = p.situation;
+    correctText = p.proverb;
+    options = shuffle([p.proverb, ...getWrongProverb(p)]);
+  } else {
+    typeTag = '✏️ 빈칸 채우기'; qText = '○에 들어갈 알맞은 말은?'; hint = p.blank;
+    correctText = p.blankAns;
+    options = shuffle([p.blankAns, ...p.blankDis]);
+  }
+  return {p, type, typeTag, qText, hint, correctText, options};
+}
+
+function getWrong(p, field) {
+  return PROVERBS.filter(o => o.id !== p.id && !p.conflict.includes(o.id))
+    .sort(() => Math.random() - .5).slice(0, 3).map(o => o[field]);
+}
+function getWrongProverb(p) {
+  return PROVERBS.filter(o => o.id !== p.id && !p.conflict.includes(o.id))
+    .sort(() => Math.random() - .5).slice(0, 3).map(o => o.proverb);
+}
+
+function startBasic() {
+  const picked = shuffle([...PROVERBS]).slice(0, selectedCount);
+  const types  = ['meaning','proverb','situation','blank'];
+  questions    = picked.map((p, i) => buildQ(p, types[i % 4]));
+  currentIdx   = 0; score = 0; correctCount = 0; wrongItems = []; answered = false;
+  showScreen('screen-quiz');
+  updateLive(); renderQ();
+}
+
+function updateLive() {
+  const el = {
+    emoji: document.getElementById('live-emoji'), title: document.getElementById('live-title'),
+    sub: document.getElementById('live-sub'), pct: document.getElementById('live-pct'),
+    bar: document.getElementById('live-bar')
+  };
+  if (currentIdx === 0 && correctCount === 0) {
+    el.emoji.textContent = '🌰'; el.title.textContent = '류봉두의 떡잎';
+    el.sub.textContent = '문제를 풀수록 레벨이 올라가요!';
+    el.pct.textContent = '-'; el.bar.style.width = '0%'; return;
+  }
+  const done = currentIdx + 1, pct = Math.round(correctCount / done * 100), t = getTitle(pct);
+  el.emoji.textContent = t.emoji; el.title.textContent = t.title;
+  el.sub.textContent   = `${done}문제 중 ${correctCount}개 정답`;
+  el.pct.textContent   = pct + '%'; el.bar.style.width = pct + '%'; el.bar.style.backgroundColor = t.bar;
+}
+
+function renderQ() {
+  answered = false;
+  const q = questions[currentIdx], total = questions.length;
+  document.getElementById('progress-fill').style.width      = ((currentIdx / total) * 100) + '%';
+  document.getElementById('quiz-progress').textContent       = `${currentIdx + 1} / ${total}`;
+  document.getElementById('quiz-score-badge').textContent    = `${score}점`;
+  document.getElementById('q-type-tag').textContent          = q.typeTag;
+  document.getElementById('q-text').textContent              = q.qText;
+  const hintEl = document.getElementById('q-hint');
+  hintEl.textContent = q.hint; hintEl.className = q.hint ? 'q-hint' : 'q-hint no-hint';
+  const ol = document.getElementById('options-list'); ol.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button'); btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-label">${LABELS[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(btn, opt, q); ol.appendChild(btn);
+  });
+  document.getElementById('feedback-box').className = 'feedback-box';
+  document.getElementById('next-btn').style.display = 'none';
+  animCard('quiz-card');
+}
+
+function selectAnswer(btn, chosen, q) {
+  if (answered) return; answered = true;
+  const isCorrect = chosen === q.correctText;
+  const pts = Math.round(1000 / questions.length);
+  document.querySelectorAll('.option-btn').forEach(b => {
+    b.disabled = true;
+    if (b.querySelector('span:last-child').textContent === q.correctText) b.classList.add('reveal');
+  });
+  if (isCorrect) { btn.classList.remove('reveal'); btn.classList.add('correct'); score += pts; correctCount++; }
+  else           { btn.classList.add('wrong'); wrongItems.push(q.p); }
+  const fb = document.getElementById('feedback-box');
+  fb.className = 'feedback-box show ' + (isCorrect ? 'ok' : 'ng');
+  document.getElementById('fb-title').textContent   = isCorrect ? '🎉 정답입니다!' : '❌ 틀렸어요';
+  document.getElementById('fb-meaning').textContent = `${q.p.proverb}: ${q.p.meaning}`;
+  document.getElementById('fb-example').textContent = `예문: ${q.p.example}`;
+  document.getElementById('quiz-score-badge').textContent = `${score}점`;
+  updateLive();
+  document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextQuestion() { currentIdx++; if (currentIdx >= questions.length) endQuiz('기본모드', questions.length, wrongItems.map(p=>p.proverb)); else renderQ(); }
+
+/* ─── 도전 모드 ─── */
+function normAns(s) { return s.replace(/[\s\W_]+/g, '').toLowerCase(); }
+
+function startAdv() {
+  advQuestions = shuffle([...PASSAGES]).slice(0, selectedAdvCount);
+  advIdx = 0; advScore = 0; advCorrect = 0; advWrong = []; advAnswered = false;
+  showScreen('screen-adv');
+  updateAdvLive(); renderAdv();
+}
+
+function updateAdvLive() {
+  const el = {
+    emoji: document.getElementById('adv-live-emoji'), title: document.getElementById('adv-live-title'),
+    sub: document.getElementById('adv-live-sub'), pct: document.getElementById('adv-live-pct'),
+    bar: document.getElementById('adv-live-bar')
+  };
+  if (advIdx === 0 && advCorrect === 0) {
+    el.emoji.textContent = '🌰'; el.title.textContent = '류봉두의 떡잎';
+    el.sub.textContent = '글을 읽고 속담을 입력하세요!';
+    el.pct.textContent = '-'; el.bar.style.width = '0%'; return;
+  }
+  const done = advIdx + 1, pct = Math.round(advCorrect / done * 100), t = getTitle(pct);
+  el.emoji.textContent = t.emoji; el.title.textContent = t.title;
+  el.sub.textContent   = `${done}문제 중 ${advCorrect}개 정답`;
+  el.pct.textContent   = pct + '%'; el.bar.style.width = pct + '%'; el.bar.style.backgroundColor = t.bar;
+}
+
+function renderAdv() {
+  advAnswered = false;
+  const q = advQuestions[advIdx], total = advQuestions.length;
+  document.getElementById('adv-progress-fill').style.width   = ((advIdx / total) * 100) + '%';
+  document.getElementById('adv-progress').textContent         = `${advIdx + 1} / ${total}`;
+  document.getElementById('adv-score-badge').textContent      = `${advScore}점`;
+
+  const genreKey = q.genre.replace(/\s/g,'');
+  const badge = document.getElementById('adv-genre-badge');
+  badge.textContent = q.genre; badge.className = `genre-badge genre-${genreKey}`;
+  document.getElementById('adv-prompt').textContent = q.prompt;
+
+  const box = document.getElementById('adv-passage');
+  box.innerHTML = q.text.split('\n\n').filter(t=>t.trim()).map(t => `<p>${t.trim()}</p>`).join('');
+
+  const inp = document.getElementById('adv-input');
+  inp.value = ''; inp.disabled = false; inp.className = 'ans-input';
+  document.getElementById('adv-feedback').className = 'feedback-box';
+  document.getElementById('adv-submit-btn').style.display = 'block';
+  document.getElementById('adv-submit-btn').disabled = false;
+  document.getElementById('adv-next-btn').style.display = 'none';
+  animCard('adv-card');
+  inp.focus();
+}
+
+function submitAdv() {
+  if (advAnswered) return;
+  const inp = document.getElementById('adv-input');
+  const val = inp.value.trim();
+  if (!val) { inp.focus(); return; }
+  advAnswered = true;
+
+  const q = advQuestions[advIdx];
+  const isCorrect = q.accept.includes(normAns(val));
+  const pts = Math.round(1000 / advQuestions.length);
+
+  inp.disabled = true;
+  inp.className = 'ans-input ' + (isCorrect ? 'correct-input' : 'wrong-input');
+  document.getElementById('adv-submit-btn').style.display = 'none';
+
+  if (isCorrect) { advScore += pts; advCorrect++; }
+  else           { advWrong.push({passage: q, myAnswer: val}); }
+
+  const fb = document.getElementById('adv-feedback');
+  fb.className = 'feedback-box show ' + (isCorrect ? 'ok' : 'ng');
+  document.getElementById('adv-fb-title').textContent   = isCorrect ? '🎉 정답입니다!' : '❌ 틀렸어요';
+  document.getElementById('adv-fb-answer').textContent  = `정답: ${q.answer}`;
+
+  // PROVERBS에서 뜻 찾기
+  const found = PROVERBS.find(p => p.proverb === q.answer);
+  document.getElementById('adv-fb-meaning').textContent = found ? `뜻: ${found.meaning}` : '';
+
+  document.getElementById('adv-score-badge').textContent = `${advScore}점`;
+  updateAdvLive();
+  document.getElementById('adv-next-btn').style.display = 'block';
+}
+
+function nextAdv() {
+  advIdx++;
+  if (advIdx >= advQuestions.length) {
+    endQuiz('도전모드', advQuestions.length, advWrong.map(w => w.passage.answer));
+  } else renderAdv();
+}
+
+/* ─── 공통 결과 ─── */
+function endQuiz(mode, total, wrongProverbs) {
+  const isAdv   = mode === '도전모드';
+  const correct = isAdv ? advCorrect : correctCount;
+  const sc      = isAdv ? advScore   : score;
+  const wItems  = isAdv ? advWrong   : wrongItems;
+  const pct     = Math.round(correct / total * 100);
+  saveScore(player.name, sc, correct, total);
+  const t = getTitle(pct);
+
+  document.getElementById('title-banner').className = 'title-banner ' + t.color;
+  document.getElementById('banner-emoji').textContent = t.emoji;
+  document.getElementById('banner-title').textContent = t.title;
+  document.getElementById('banner-sub').textContent   =
+    `${player.name}님 · ${pct}% 정답 · ${correct}/${total}문제\n${t.sub}`;
+  document.getElementById('res-correct').textContent  = correct;
+  document.getElementById('res-wrong').textContent    = total - correct;
+  document.getElementById('res-score').textContent    = sc;
+
+  document.getElementById('send-status').style.display = 'none';
+  document.getElementById('send-status').className = 'send-status';
+  const sb = document.getElementById('btn-send');
+  sb.disabled = false; sb.textContent = '📤 결과 전송하기';
+  // 전송용 상태 저장
+  sb.dataset.mode    = mode;
+  sb.dataset.total   = total;
+  sb.dataset.correct = correct;
+  sb.dataset.score   = sc;
+  sb.dataset.pct     = pct;
+  sb.dataset.title   = t.title;
+  sb.dataset.wrong   = wrongProverbs.join(', ');
+
+  // 틀린 목록
+  const ws = document.getElementById('wrong-section');
+  if (wItems.length > 0) {
+    ws.style.display = 'block';
+    document.getElementById('wrong-count-badge').textContent = wItems.length + '개';
+    if (isAdv) {
+      document.getElementById('wrong-list').innerHTML = wItems.map(w => {
+        const found = PROVERBS.find(p => p.proverb === w.passage.answer);
+        return `<div class="wrong-item">
+          <div class="wrong-word">${w.passage.answer}</div>
+          <div class="wrong-meaning">${found ? found.meaning : ''}</div>
+          <div class="wrong-answer">내 답변: ${w.myAnswer}</div>
+        </div>`;
+      }).join('');
+    } else {
+      document.getElementById('wrong-list').innerHTML = wItems.map(p =>
+        `<div class="wrong-item">
+          <div class="wrong-word">${p.proverb}</div>
+          <div class="wrong-meaning">${p.meaning}</div>
+          <div class="wrong-answer">예문: ${p.example}</div>
+        </div>`
+      ).join('');
+    }
+  } else ws.style.display = 'none';
+
+  renderScoreboard('score-list-result');
+  showScreen('screen-result');
+  window.scrollTo(0, 0);
+}
+
+// ── 전송 ──
+async function sendToSheet() {
+  const btn = document.getElementById('btn-send');
+  const st  = document.getElementById('send-status');
+  const d   = btn.dataset;
+  btn.disabled = true;
+  st.className = 'send-status sending'; st.textContent = '⏳ 전송 중...';
+  const payload = {
+    action: 'submit', sid: player.sid, name: player.name,
+    mode: d.mode, total: +d.total, correct: +d.correct,
+    score: +d.score, pct: +d.pct, title: d.title, wrong: d.wrong
+  };
+  try {
+    const res  = await fetch(SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload)});
+    const data = await res.json();
+    if (data.status === 'ok') {
+      st.className = 'send-status sent';
+      st.textContent = data.isBest ? '✅ 새 최고 기록! 구글 시트에 전송됐습니다!' : '✅ 구글 시트에 전송됐습니다!';
+      btn.textContent = '✅ 전송 완료';
+    } else throw new Error(data.message || '서버 오류');
+  } catch(e) {
+    st.className = 'send-status failed'; st.textContent = '❌ 전송 실패. 인터넷 연결을 확인해 주세요.';
+    btn.disabled = false;
+  }
+}
+
+// ── 유틸 ──
+function renderScoreboard(id) {
+  const el = document.getElementById(id); if (!el) return;
+  const scores = getScores();
+  if (!scores.length) { el.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:13px;padding:16px 0">아직 기록이 없어요</div>'; return; }
+  el.innerHTML = scores.slice(0,10).map((s,i) => {
+    const rc = i===0?'r1':i===1?'r2':i===2?'r3':'';
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+    return `<div class="score-item"><span class="score-rank ${rc}">${medal}</span><span class="score-name">${s.name}</span><span class="grade-badge">${s.pct}%</span><span style="font-size:11px;color:var(--text3)">${s.date}</span><span class="score-val">${s.score}점</span></div>`;
+  }).join('');
+}
+function animCard(id) {
+  const c = document.getElementById(id);
+  c.style.opacity='0'; c.style.transform='translateY(8px)';
+  requestAnimationFrame(() => { c.style.transition='opacity .22s,transform .22s'; c.style.opacity='1'; c.style.transform='none'; });
+}
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function retryQuiz() { startQuiz(); }
+function goHome() { showScreen('screen-start'); renderScoreboard('score-list-start'); document.getElementById('scoreboard-card').style.display = getScores().length?'block':'none'; }
+
+// Enter 로그인 / 도전 모드 제출
+document.getElementById('inp-name').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('screen-adv').classList.contains('active')) {
+    if (!advAnswered) submitAdv(); else nextAdv();
+  }
+});
+</script>
+</body>
+</html>
